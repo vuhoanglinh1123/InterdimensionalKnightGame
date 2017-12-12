@@ -15,11 +15,10 @@ export var atk_thurst_speed = 1000
 
 export var poison_tick = 1
 
-
 ##ONREADY VAR
 onready var ground_detector = get_node("ground_detector")
-onready var rotate = get_node("rotate")
-onready var hitboxes = rotate.get_node("hitboxes")
+onready var flip = get_node("flip")
+onready var hitboxes = flip.get_node("hitboxes")
 ##VAR
 #inputs
 var btn_left = input_states.new("btn_left")
@@ -65,7 +64,7 @@ func ground_check():
 		if body.is_in_group("ground"):
 			return true
 	else:
-		return false		
+		return false
 	pass
 	
 #move function
@@ -102,7 +101,7 @@ func _fixed_process(delta):
 	elif state == "atk2":
 		state_atk2(delta)
 	#animation
-	rotate.set_scale(Vector2(direction,1))
+	flip.set_scale(Vector2(direction,1))
 	pass
 
 ##STATES
@@ -202,14 +201,14 @@ func atk_break():
 		atk_move = ""
 	pass
 #damaged
-func damaged(damage, direction, push_back_force, status, status_time):
+func damaged(damage, direction, push_back_force):
 	cur_health -= damage
 	set_linear_velocity(Vector2(push_back_force.x*direction, push_back_force.y))
-	rotate.set_scale(Vector2( direction , 1))
-	element_next = status
-	
-	if status == "poison":
-		element_poison_duration = status_time
+	flip.set_scale(Vector2( direction , 1))
+#	element_next = status
+#	
+#	if status == "poison":
+#		element_poison_duration = status_time
 	pass
 
 ## ELEMENTS

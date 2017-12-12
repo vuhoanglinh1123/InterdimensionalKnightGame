@@ -32,9 +32,9 @@ func _process(delta):
 	
 	linear_velocity_label.set_text( str(target.get_linear_velocity()) )
 	
-	atk_state_label.set_text(atk_state_label_begin + target.atk_move)
+#	atk_state_label.set_text(atk_state_label_begin + target.atk_move)
 	
 	health_label.set_text(health_label_begin + str(target.cur_health) )
 	
-	element_label.set_text(element_label_begin + target.element)
+#	element_label.set_text(element_label_begin + target.element)
 	pass

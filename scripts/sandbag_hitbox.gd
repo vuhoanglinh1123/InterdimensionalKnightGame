@@ -20,5 +20,5 @@ func _on_touch_body_area_enter( area ):
 		status = "poison"
 		direction = area.get_parent().direction
 		push_back_force = area.get_parent().get_linear_velocity()
-		area.get_parent().damaged(damage, direction, push_back_force, status, poison_time)
+		area.get_parent().damaged(damage, direction, push_back_force)
 	pass # replace with function body
