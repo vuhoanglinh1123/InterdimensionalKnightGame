@@ -62,15 +62,14 @@ max_health = 20
 
 [node name="flip" type="Node2D" parent="."]
 
-editor/display_folded = true
-
 [node name="hitboxes" type="Node2D" parent="flip"]
 
-editor/display_folded = true
 script/script = ExtResource( 2 )
 damage = 1
 push_back_force = Vector2( 500, -200 )
 status = "none"
+atk_1_combo_time_max = 0.5
+atk_1_end_combo_time_max = 0.5
 
 [node name="slash1" type="Area2D" parent="flip/hitboxes"]
 

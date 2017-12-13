@@ -10,6 +10,9 @@ var btn_up = input_states.new("btn_up")
 var btn_atk1 = input_states.new("btn_atk1")
 var btn_atk2 = input_states.new("btn_atk2")
 
+#weapon
+onready var weapon = flip.get_node("hitboxes")
+
 
 
 func _ready():
@@ -24,8 +27,8 @@ func switchState(delta):
 		state_air(delta)
 	elif state == "ground":
 		state_ground(delta)
-#	elif state == "atk1_1":
-#		state_atk1_1(delta)
+	elif state == "atk1":
+		state_atk1(delta)
 #	elif state == "atk1_2":
 #		state_atk1_2(delta)
 #	elif state == "atk2":
@@ -71,6 +74,10 @@ func state_ground(delta):
 #		jump(jump_force)
 	if btn_up.check() == 1:
 		jump(jump_force)
+	elif btn_atk1.check() == 1:
+		state_next = "atk1"
+		weapon.atk1()
+
 	
 	#check state
 	if !ground_check():
@@ -93,3 +100,7 @@ func state_air(delta):
 	if ground_check():
 		state_next = "ground"
 	pass
+
+#atk1
+func state_atk1(delta):
+	weapon.state_atk1(delta)

@@ -26,10 +26,6 @@ transform/pos = Vector2( 1536, 556.357 )
 
 [node name="sandbag" parent="enemies" instance=ExtResource( 3 )]
 
-transform/pos = Vector2( 748.779, 244.734 )
-
-[node name="sandbag 2" parent="enemies" instance=ExtResource( 3 )]
-
-transform/pos = Vector2( 1801.61, 260.512 )
+transform/pos = Vector2( 1054.83, 390.426 )
 
 
