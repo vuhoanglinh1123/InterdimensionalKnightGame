@@ -14,7 +14,6 @@ var btn_atk2 = input_states.new("btn_atk2")
 onready var weapon = flip.get_node("hitboxes")
 
 
-
 func _ready():
 	state_next = "air"
 	pass

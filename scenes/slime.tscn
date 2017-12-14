@@ -1,0 +1,263 @@
+[gd_scene load_steps=10 format=1]
+
+[ext_resource path="res://scripts/slime.gd" type="Script" id=1]
+[ext_resource path="res://sprites/slime_idle.png" type="Texture" id=2]
+[ext_resource path="res://sprites/slime_moving_left.png" type="Texture" id=3]
+[ext_resource path="res://scenes/debugger.tscn" type="PackedScene" id=4]
+
+[sub_resource type="CapsuleShape2D" id=1]
+
+custom_solver_bias = 0.0
+radius = 10.0
+height = 20.0
+
+[sub_resource type="Animation" id=2]
+
+resource/name = "idle"
+length = 1.2
+loop = true
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/imported = false
+tracks/0/keys = {
+"times": FloatArray( 0, 0.3, 0.6, 0.9 ),
+"transitions": FloatArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 1 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:texture")
+tracks/1/interp = 1
+tracks/1/imported = false
+tracks/1/keys = {
+"times": FloatArray( 0 ),
+"transitions": FloatArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 2 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath(".:hframes")
+tracks/2/interp = 1
+tracks/2/imported = false
+tracks/2/keys = {
+"times": FloatArray( 0 ),
+"transitions": FloatArray( 1 ),
+"update": 1,
+"values": [ 3 ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath(".:offset")
+tracks/3/interp = 1
+tracks/3/imported = false
+tracks/3/keys = {
+"times": FloatArray( 0, 0.3, 0.6, 0.9 ),
+"transitions": FloatArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( 0, 0 ), Vector2( -5, 0 ), Vector2( 0, 0 ), Vector2( 5, 0 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+
+resource/name = "walk"
+length = 0.4
+loop = true
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/imported = false
+tracks/0/keys = {
+"times": FloatArray( 0 ),
+"transitions": FloatArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 3 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:hframes")
+tracks/1/interp = 1
+tracks/1/imported = false
+tracks/1/keys = {
+"times": FloatArray( 0 ),
+"transitions": FloatArray( 1 ),
+"update": 1,
+"values": [ 8 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath(".:frame")
+tracks/2/interp = 1
+tracks/2/imported = false
+tracks/2/keys = {
+"times": FloatArray( 0, 0.4 ),
+"transitions": FloatArray( 1, 1 ),
+"update": 0,
+"values": [ 0, 7 ]
+}
+
+[sub_resource type="RectangleShape2D" id=4]
+
+custom_solver_bias = 0.0
+extents = Vector2( 50, 50 )
+
+[sub_resource type="CapsuleShape2D" id=5]
+
+custom_solver_bias = 0.0
+radius = 10.0
+height = 20.0
+
+[node name="slime" type="RigidBody2D"]
+
+z/z = 1
+input/pickable = false
+shapes/0/shape = SubResource( 1 )
+shapes/0/transform = Matrix32( 5.76923, 0, 0, 1.73913, 5, 10 )
+shapes/0/trigger = false
+collision/layers = 2
+collision/mask = 4
+mode = 2
+mass = 1.0
+friction = 1.0
+bounce = 0.0
+gravity_scale = 1.0
+custom_integrator = false
+continuous_cd = 0
+contacts_reported = 0
+contact_monitor = false
+sleeping = false
+can_sleep = true
+velocity/linear = Vector2( 0, 0 )
+velocity/angular = 0.0
+damp_override/linear = -1.0
+damp_override/angular = -1.0
+script/script = ExtResource( 1 )
+max_health = 10
+extra_gravity = 2500
+accerleration = 100
+max_velocity = 300
+jump_force = 800
+max_time_to_walk = 5
+max_time_btw_walks = 2
+range_offset = 200
+chase_velocity = 300
+turn_rate = 5
+
+[node name="flip" type="Node2D" parent="."]
+
+[node name="Sprite" type="Sprite" parent="flip"]
+
+transform/scale = Vector2( 2, 2 )
+texture = ExtResource( 2 )
+flip_h = true
+hframes = 3
+frame = 1
+
+[node name="anim" type="AnimationPlayer" parent="flip/Sprite"]
+
+playback/process_mode = 1
+playback/default_blend_time = 0.0
+root/root = NodePath("..")
+anims/idle = SubResource( 2 )
+anims/walk = SubResource( 3 )
+playback/active = true
+playback/speed = 0.5
+blend_times = [  ]
+autoplay = ""
+
+[node name="player_detector" type="RayCast2D" parent="flip"]
+
+enabled = true
+cast_to = Vector2( 450, 0 )
+layer_mask = 1
+type_mask = 15
+
+[node name="wall_detector" type="RayCast2D" parent="flip"]
+
+transform/pos = Vector2( 21, 0 )
+enabled = true
+cast_to = Vector2( 50, 0 )
+layer_mask = 4
+type_mask = 15
+
+[node name="attack_range" type="Area2D" parent="flip"]
+
+transform/pos = Vector2( 120, 0 )
+input/pickable = true
+shapes/0/shape = SubResource( 4 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+
+[node name="shape" type="CollisionShape2D" parent="flip/attack_range"]
+
+shape = SubResource( 4 )
+trigger = false
+_update_shape_index = 0
+
+[node name="physic_collision" type="CollisionShape2D" parent="."]
+
+visibility/visible = false
+transform/pos = Vector2( 5, 10 )
+transform/scale = Vector2( 5.76923, 1.73913 )
+shape = SubResource( 1 )
+trigger = false
+_update_shape_index = 0
+
+[node name="hurtbox" type="Area2D" parent="." groups=[
+"enermy_hurtbox",
+]]
+
+editor/display_folded = true
+visibility/visible = false
+input/pickable = true
+shapes/0/shape = SubResource( 5 )
+shapes/0/transform = Matrix32( 5.76923, 0, 0, 1.73913, 4.99999, 10 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+collision/layers = 2
+
+[node name="shape" type="CollisionShape2D" parent="hurtbox"]
+
+transform/pos = Vector2( 4.99999, 10 )
+transform/scale = Vector2( 5.76923, 1.73913 )
+shape = SubResource( 5 )
+trigger = false
+_update_shape_index = 0
+
+[node name="debugger" parent="." instance=ExtResource( 4 )]
+
+[node name="ground_detector" type="RayCast2D" parent="."]
+
+transform/pos = Vector2( -70, 71 )
+enabled = true
+cast_to = Vector2( 150, 0 )
+layer_mask = 4
+type_mask = 1
+
+[node name="bound_detector_2" type="RayCast2D" parent="."]
+
+transform/pos = Vector2( -71, 30 )
+enabled = true
+cast_to = Vector2( 0, 50 )
+layer_mask = 4
+type_mask = 1
+
+[node name="bound_detector_1" type="RayCast2D" parent="."]
+
+transform/pos = Vector2( 71, 30 )
+enabled = true
+cast_to = Vector2( 0, 50 )
+layer_mask = 4
+type_mask = 1
+
+[connection signal="body_enter" from="flip/attack_range" to="." method="_on_attack_range_body_enter"]
+
+[connection signal="body_exit" from="flip/attack_range" to="." method="_on_attack_range_body_exit"]
+
+

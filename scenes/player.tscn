@@ -30,7 +30,9 @@ extents = Vector2( 72.076, 17.7886 )
 custom_solver_bias = 0.0
 extents = Vector2( 64, 64 )
 
-[node name="player" type="RigidBody2D"]
+[node name="player" type="RigidBody2D" groups=[
+"PLAYER",
+]]
 
 input/pickable = false
 shapes/0/shape = SubResource( 1 )
@@ -147,7 +149,7 @@ _update_shape_index = 0
 
 [node name="ground_detector" type="RayCast2D" parent="."]
 
-transform/pos = Vector2( -64, 64 )
+transform/pos = Vector2( -64, 65 )
 enabled = true
 cast_to = Vector2( 128, 0 )
 layer_mask = 4

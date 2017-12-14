@@ -43,11 +43,12 @@ func _fixed_process(delta):
 func ground_check():
 	if ground_detector.is_colliding():
 		var body = ground_detector.get_collider()
-		if body.is_in_group("ground"):
+		if body.is_in_group("GROUND"):
 			return true
 	else:
 		return false
 	pass
+
 ##OVERRIDE
 #override this for switching state, 
 func switchState(delta):
