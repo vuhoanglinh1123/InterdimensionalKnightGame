@@ -28,10 +28,9 @@ func switchState(delta):
 		state_ground(delta)
 	elif state == "atk1":
 		state_atk1(delta)
-#	elif state == "atk1_2":
-#		state_atk1_2(delta)
-#	elif state == "atk2":
-#		state_atk2(delta)
+	elif state == "atk2":
+		state_atk2(delta)
+		
 	#animation
 	flip.set_scale(Vector2(direction,1))
 	pass
@@ -62,15 +61,8 @@ func state_ground(delta):
 		move( direction * run_max_speed, accerleration)
 	else:
 		move(0, accerleration)
-	#jump	
-#	if btn_atk1.check() == 1:
-#		state_next = "atk1_1"
-#		atk_time = 0
-#	elif btn_atk2.check() == 1:
-#		state_next = "atk2"
-#		atk_time = 0
-#	elif btn_up.check() == 1:
-#		jump(jump_force)
+	
+	#press
 	if btn_up.check() == 1:
 		jump(jump_force)
 	elif btn_atk1.check() == 1:

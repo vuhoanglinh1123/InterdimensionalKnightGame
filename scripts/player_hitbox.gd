@@ -23,6 +23,7 @@ func _ready():
 	set_fixed_process(true)
 	
 	slash1.set_collision_mask(2)
+	slash2.set_collision_mask(2)
 	
 	slash1.set_enable_monitoring(false)
 	slash2.set_enable_monitoring(false)
@@ -33,13 +34,12 @@ func _fixed_process(delta):
 		if atk_time > 0:
 			atk_time -= delta
 		else:
-			turnOffHitbox(slash1)
+			turnOffHitbox()
 		if atk_1_combo_time > 0:
 			atk_1_combo_time -= delta
 		else:
 			atk1_combo = 0
 			stopAtking()
-			print("end")
 	pass
 
 #decide what can you do in this state
@@ -53,32 +53,40 @@ func atk1():
 		if atk1_combo == 1:
 			atk1_2()
 			atk_1_combo_time = atk_1_combo_time_max
-		elif atk1_combo == 2:
-			atk1_3()
-			atk_1_combo_time = atk_1_end_combo_time_max
+			atk1_combo += 1
+#		elif atk1_combo == 2:
+#			atk1_3()
+#			atk_1_combo_time = atk_1_end_combo_time_max
 	else:
 		atk1_1()
 		atking = 1
 		atk_1_combo_time = atk_1_combo_time_max
+		atk1_combo += 1
 	
-	atk1_combo += 1
 	pass
 
 func atk1_1():
 	user.move(0, user.accerleration)
 	atk_time = atk_1_end_combo_time_max/2
 	slash1.set_enable_monitoring(true)
-	
 	pass
 
 func atk1_2():
+	user.move(0, user.accerleration)
+	atk_time = atk_1_end_combo_time_max/2
+	slash2.set_enable_monitoring(true)
 	pass
+#
+#func atk1_3():
+#	user.move(0, user.accerleration)
+#	atk_time = atk_1_end_combo_time_max/2
+#	slash2.set_enable_monitoring(true)
+#	pass
 
-func atk1_3():
-	pass
-
-func turnOffHitbox(hitbox):
-	hitbox.set_enable_monitoring(false)
+func turnOffHitbox():
+	slash1.set_enable_monitoring(false)
+	slash2.set_enable_monitoring(false)
+	thrust.set_enable_monitoring(false)
 	pass
 
 func stopAtking():
@@ -86,7 +94,27 @@ func stopAtking():
 	user.state_next = "air"
 	pass
 
+func _on_slash1_area_enter( area ):
+	if area.is_in_group("enermy_hurtbox"):
+		direction = flip.get_scale().x
+		area.get_parent().damaged(damage, direction,push_back_force)
+	pass # replace with function body
 
+
+func _on_slash2_area_enter( area ):
+	if area.is_in_group("enermy_hurtbox"):
+		direction = flip.get_scale().x
+		area.get_parent().damaged(damage*2, direction, push_back_force*1.5)
+	pass # replace with function body
+
+#
+func _on_thrust_area_enter( area ):
+	if area.is_in_group("enermy_hurtbox"):
+		direction = flip.get_scale().x
+		area.get_parent().damaged(damage, direction,push_back_force*1.75)
+	pass # replace with function body
+	
+	
 ##call by player to move hitbox to active layer = 2
 #func attack(atk_type):
 #
@@ -108,22 +136,3 @@ func stopAtking():
 #	
 #	pass
 #
-func _on_slash1_area_enter( area ):
-	if area.is_in_group("enermy_hurtbox"):
-		direction = flip.get_scale().x
-		area.get_parent().damaged(damage, direction,push_back_force)
-	pass # replace with function body
-
-
-func _on_slash2_area_enter( area ):
-	if area.is_in_group("enermy_hurtbox"):	
-		direction = flip.get_scale().x
-		area.get_parent().damaged(damage*2, direction, push_back_force*1.5, status)
-	pass # replace with function body
-
-#
-func _on_thrust_area_enter( area ):
-	if area.is_in_group("enermy_hurtbox"):
-		direction = flip.get_scale().x
-		area.get_parent().damaged(damage, direction,push_back_force*1.75, status)
-	pass # replace with function body

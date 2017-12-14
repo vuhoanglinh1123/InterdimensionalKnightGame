@@ -38,6 +38,7 @@ func damaged(damage, direction, push_back_force):
 ##FIXED PROCESS
 func _fixed_process(delta):
 	
+	
 	#death
 	if cur_health <= 0:
 		queue_free()

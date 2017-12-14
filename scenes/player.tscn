@@ -68,7 +68,7 @@ max_health = 20
 
 script/script = ExtResource( 2 )
 damage = 1
-push_back_force = Vector2( 500, -200 )
+push_back_force = Vector2( 250, -200 )
 status = "none"
 atk_1_combo_time_max = 0.5
 atk_1_end_combo_time_max = 0.5

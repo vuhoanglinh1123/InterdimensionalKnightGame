@@ -1,59 +1,29 @@
-[gd_scene load_steps=7 format=1]
+[gd_scene load_steps=4 format=1]
 
 [ext_resource path="res://scenes/player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/ground.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scenes/wall.tscn" type="PackedScene" id=3]
-[ext_resource path="res://scenes/platform.tscn" type="PackedScene" id=4]
-[ext_resource path="res://scenes/sandbag.tscn" type="PackedScene" id=5]
-[ext_resource path="res://scenes/slime.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scenes/sandbag.tscn" type="PackedScene" id=3]
 
 [node name="world" type="Node"]
 
 [node name="player" parent="." instance=ExtResource( 1 )]
 
 transform/pos = Vector2( 88.636, 92.7261 )
-jump_force = 1200
 
 [node name="grounds" type="Node" parent="."]
 
 [node name="ground" parent="grounds" instance=ExtResource( 2 )]
 
-transform/pos = Vector2( 512, 550 )
+transform/pos = Vector2( 512, 556.357 )
 
 [node name="ground1" parent="grounds" instance=ExtResource( 2 )]
 
-transform/pos = Vector2( 1486, 550 )
-
-[node name="ground2" parent="grounds" instance=ExtResource( 2 )]
-
-transform/pos = Vector2( 2510, 550 )
-
-[node name="ground3" parent="grounds" instance=ExtResource( 2 )]
-
-transform/pos = Vector2( 3484, 550 )
-
-[node name="walls" type="Node" parent="."]
-
-[node name="wall" parent="walls" instance=ExtResource( 3 )]
-
-[node name="wall1" parent="walls" instance=ExtResource( 3 )]
-
-transform/pos = Vector2( 4046, 0 )
-
-[node name="platforms" type="Node" parent="."]
-
-[node name="platform" parent="platforms" instance=ExtResource( 4 )]
-
-transform/pos = Vector2( 1760, 330 )
+transform/pos = Vector2( 1536, 556.357 )
 
 [node name="enemies" type="Node" parent="."]
 
-[node name="sandbag" parent="enemies" instance=ExtResource( 5 )]
+[node name="sandbag" parent="enemies" instance=ExtResource( 3 )]
 
-transform/pos = Vector2( 1052.56, 351.801 )
-
-[node name="slime" parent="enemies" instance=ExtResource( 6 )]
-
-transform/pos = Vector2( 1698.69, 171.239 )
+transform/pos = Vector2( 1054.83, 390.426 )
 
 
