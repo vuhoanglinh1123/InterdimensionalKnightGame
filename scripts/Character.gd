@@ -1,11 +1,18 @@
 extends RigidBody2D
 
 ##EXPORT VAR
-export var run_max_speed = 800
-export var jump_force = 800
-export var extra_gravity = 2500
-export var accerleration = 100
-export var max_health = 20
+export (int) var MAX_RUN_SPEED = 800
+export (int) var JUMP_FORCE = 800
+export (int) var EXTRA_GRAVITY = 2500
+export (int) var ACCERLERATION = 100
+export (int) var MAX_HEALTH = 20
+
+
+var max_run_speed = 0
+var jump_force = 0
+var extra_gravity = 0
+var accerleration = 0
+var max_health = 0
 ##onready
 onready var flip = get_node("flip")
 onready var ground_detector = get_node("ground_detector")
@@ -20,11 +27,15 @@ var cur_health = 0
 var state = ""
 var state_next = ""
 
+##ELEMENTS_HARMFUL
+var status_array = Array()
 
 
 func _ready():
+	init_variable()
 	#set fixed process
 	set_fixed_process(true)
+	set_process(true)
 	#apply gravity
 	set_applied_force(Vector2(0,extra_gravity))
 	#set begin health
@@ -37,6 +48,19 @@ func _fixed_process(delta):
 	switchState(delta)
 	#call destroyed
 	destroyed()
+	pass
+
+func _process(delta):
+	active_status(delta)
+	pass
+
+#inti variable
+func init_variable():
+	max_run_speed = MAX_RUN_SPEED
+	jump_force = JUMP_FORCE
+	extra_gravity = EXTRA_GRAVITY
+	accerleration = ACCERLERATION
+	max_health = MAX_HEALTH
 	pass
 
 #ground check
@@ -72,6 +96,25 @@ func damaged(damage, direction, push_back_force):
 #	if status == "poison":
 #		element_poison_duration = status_time
 #	pass
+
+#make element effect run
+func active_status(delta):
+	for status in status_array:
+		if status.type == utils.ELEMENT.POISON:
+			status.duration -= delta
+			active_poison(status.level)
+			if not status.has_stat_debug:
+				debug_poison(status.level)
+			pass
+	pass
+
+func active_poison(level):
+	
+	pass
+
+func debug_poison(level):
+	
+	pass
 
 ##free instance when die
 func destroyed():

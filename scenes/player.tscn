@@ -56,11 +56,11 @@ velocity/angular = 0.0
 damp_override/linear = -1.0
 damp_override/angular = -1.0
 script/script = ExtResource( 1 )
-run_max_speed = 800
-jump_force = 800
-extra_gravity = 2500
-accerleration = 100
-max_health = 20
+MAX_RUN_SPEED = 800
+JUMP_FORCE = 800
+EXTRA_GRAVITY = 2500
+ACCERLERATION = 100
+MAX_HEALTH = 20
 
 [node name="flip" type="Node2D" parent="."]
 

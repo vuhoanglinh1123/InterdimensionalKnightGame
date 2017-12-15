@@ -55,10 +55,10 @@ func state_ground(delta):
 	#inputs
 	if btn_left.check() == 2:
 		direction = -1
-		move( direction * run_max_speed, accerleration)
+		move( direction * max_run_speed, accerleration)
 	elif btn_right.check() == 2:
 		direction = 1
-		move( direction * run_max_speed, accerleration)
+		move( direction * max_run_speed, accerleration)
 	else:
 		move(0, accerleration)
 	
@@ -81,10 +81,10 @@ func state_air(delta):
 	#inputs
 	if btn_left.check() == 2:
 		direction = -1
-		move( direction * run_max_speed, accerleration)
+		move( direction * max_run_speed, accerleration)
 	elif btn_right.check() == 2:
 		direction = 1
-		move( direction * run_max_speed, accerleration)
+		move( direction * max_run_speed, accerleration)
 	else:
 		move(0, accerleration)
 	#state
