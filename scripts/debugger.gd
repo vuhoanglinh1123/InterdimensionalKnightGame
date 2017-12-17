@@ -28,7 +28,7 @@ func flip():
 	
 func _process(delta):
 	flip()
-	state_label.set_text(state_label_begin + target.state)
+	state_label.set_text(state_label_begin + str(target.get_current_state()))
 	
 	linear_velocity_label.set_text( str(target.get_linear_velocity()) )
 	
