@@ -138,9 +138,6 @@ max_velocity = 300
 jump_force = 800
 max_time_to_walk = 5
 max_time_btw_walks = 2
-range_offset = 200
-chase_velocity = 300
-turn_rate = 5
 
 [node name="flip" type="Node2D" parent="."]
 
