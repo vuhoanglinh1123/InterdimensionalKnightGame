@@ -18,8 +18,9 @@ export (int) var EXTRA_GRAVITY  = 2500
 export (int) var ACCELERATION   = 100
 export (int) var MAX_VELOCITY   = 300
 export (int) var JUMP_FORCE     = 800
-export (int) var RANGE_OFFSET   = 200
+export (int) var PURSUIT_RANGE  = 1200
 export (int) var CHASE_VELOCITY = 300
+export (int) var ATTACK_RANGE   = 200
 
 # Character
 # stats
@@ -45,6 +46,8 @@ func _ready():
 # Character
 func _process(delta):
 	# flip the sprite
+	if get_linear_velocity().x != 0:
+		direction = sign(get_linear_velocity().x)
 	flip.set_scale(Vector2(direction, 1))
 	
 	# death

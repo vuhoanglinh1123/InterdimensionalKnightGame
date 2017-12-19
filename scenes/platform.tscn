@@ -9,8 +9,10 @@ extents = Vector2( 384, 25 )
 
 [node name="platform" type="StaticBody2D" groups=[
 "GROUND",
+"PLATFORM",
 ]]
 
+z/z = -100
 input/pickable = false
 shapes/0/shape = SubResource( 1 )
 shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )

@@ -10,7 +10,7 @@
 
 [node name="player" parent="." instance=ExtResource( 1 )]
 
-transform/pos = Vector2( 1202.47, 344.407 )
+transform/pos = Vector2( 829.399, -29.6212 )
 jump_force = 1200
 
 [node name="grounds" type="Node" parent="."]
@@ -43,14 +43,25 @@ transform/pos = Vector2( 3946, 0 )
 
 [node name="platform" parent="platforms" instance=ExtResource( 4 )]
 
-transform/pos = Vector2( 1760, 330 )
+transform/pos = Vector2( 960, 330 )
+
+[node name="platform1" parent="platforms" instance=ExtResource( 4 )]
+
+transform/pos = Vector2( 1760, 130 )
+
+[node name="platform2" parent="platforms" instance=ExtResource( 4 )]
+
+transform/pos = Vector2( 2510, 130 )
+
+[node name="platform3" parent="platforms" instance=ExtResource( 4 )]
+
+transform/pos = Vector2( 3260, 130 )
 
 [node name="enemies" type="Node" parent="."]
 
 [node name="slime" parent="enemies" instance=ExtResource( 5 )]
 
-transform/pos = Vector2( 1698.69, 171.239 )
-RANGE_OFFSET = 200
-CHASE_VELOCITY = 500
+transform/pos = Vector2( 1653.09, -9.21259 )
+JUMP_FORCE = 1200
 
 
