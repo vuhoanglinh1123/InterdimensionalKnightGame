@@ -25,8 +25,9 @@ export (int) var ATTACK_RANGE   = 200
 # Character
 # stats
 var cur_health = 0
-var speed          = Vector2()
-var direction      = 1
+var speed      = Vector2()
+var direction  = 1
+var got_hit    = false 
 
 func _ready():
 	set_process(true)
@@ -46,13 +47,18 @@ func _ready():
 # Character
 func _process(delta):
 	# flip the sprite
-	if get_linear_velocity().x != 0:
-		direction = sign(get_linear_velocity().x)
 	flip.set_scale(Vector2(direction, 1))
 	
 	# death
 	if cur_health <= 0:
 		queue_free()
+	pass
+
+# define how SELF moves
+func move(target, max_velocity):
+	var position = get_pos()
+	var velocity = Vector2(target - get_pos()).normalized() * max_velocity
+	set_linear_velocity(Vector2(velocity.x, get_linear_velocity().y).floor())
 	pass
 
 # Character
@@ -65,10 +71,19 @@ func ground_check():
 	else:
 		return false
 	pass
+var dir
+var push_force
 
 # Character
-func damaged(damage, direction, push_back_force, status):
+func damaged(damage, direction, push_back_force):
+	got_hit = true
 	cur_health -= damage
-	set_linear_velocity(Vector2(push_back_force.x*direction, push_back_force.y))
-	flip.set_scale(Vector2( direction , 1))
+	dir = -direction
+	push_force = push_back_force * direction + get_pos()
+	set_axis_velocity(Vector2(0,push_back_force.y))
+	pass
+
+func knocked_back():
+	move(push_force, push_force.x)
+	direction = dir
 	pass

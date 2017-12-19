@@ -27,7 +27,6 @@ func flip():
 		child.set_scale( Vector2( target.direction, 1 ) )
 	
 func _process(delta):
-	flip()
 	state_label.set_text(state_label_begin + str(target.get_current_state()))
 	
 	linear_velocity_label.set_text( str(target.get_linear_velocity()) )

@@ -46,7 +46,7 @@ func move(to_speed, acc):
 	
 #jump function
 func jump(force):
-	set_axis_velocity( Vector2(0,-force) )
+	set_linear_velocity( Vector2(0,-force) )
 	pass
 
 ##STATES

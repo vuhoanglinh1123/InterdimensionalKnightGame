@@ -38,6 +38,8 @@ func pursuit():
 	target_position = body.target.get_pos()
 	set_trace()
 	move_to_next_trace()
+	if body.get_linear_velocity().x != 0:
+		body.direction = sign(body.get_linear_velocity().x)
 	pass
 
 func set_trace():

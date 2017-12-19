@@ -26,7 +26,7 @@ func _ready():
 	#set fixed process
 	set_fixed_process(true)
 	#apply gravity
-	set_applied_force(Vector2(0,extra_gravity))
+	add_force(Vector2(0,0),Vector2(0,extra_gravity))
 	#set begin health
 	cur_health = max_health
 	pass
@@ -60,9 +60,8 @@ func switchState(delta):
 #direction: push direction in x-axis
 func damaged(damage, direction, push_back_force):
 	cur_health -= damage
-	set_linear_velocity(Vector2(push_back_force.x*direction, push_back_force.y))
+	set_linear_velocity(Vector2(push_back_force * direction, 0))
 	flip.set_scale(Vector2( direction , 1))
-	
 	pass
 
 ##to apply element

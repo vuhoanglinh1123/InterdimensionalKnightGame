@@ -111,7 +111,7 @@ func stopAtking():
 func _on_slash1_area_enter( area ):
 	if area.is_in_group("enermy_hurtbox"):
 		direction = flip.get_scale().x
-		area.get_parent().damaged(damage, direction,push_back_force)
+		area.get_parent().damaged(damage, direction, push_back_force)
 	pass # replace with function body
 
 

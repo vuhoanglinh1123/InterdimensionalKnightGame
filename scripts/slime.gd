@@ -37,12 +37,6 @@ func play_anim(name):
 		anim.play(name)
 	pass
 
-func move(target, max_velocity):
-	var position = get_pos()
-	var velocity = Vector2(target - get_pos()).normalized() * max_velocity
-	set_linear_velocity(Vector2(velocity.x, get_linear_velocity().y))
-	pass
-
 func _draw():
 	draw_circle(Vector2(0,0), PURSUIT_RANGE, Color(0, 1, 0, 0.1))
 	var prev_item = get_pos()
@@ -69,6 +63,9 @@ func wander():
 			WanderBehavior.exit()
 			StackFSM.pop_state()
 			StackFSM.push_state(STATE_PURSUIT)
+	
+	if got_hit:
+		StackFSM.push_state(STATE_HIT)
 	pass
 
 # PURSUIT STATE -----------------------------------------------------------------------
@@ -89,6 +86,8 @@ func pursuit():
 		PursuitBehavior.exit()
 		StackFSM.push_state(STATE_ATTACK)
 	
+	if got_hit:
+		StackFSM.push_state(STATE_HIT)
 	pass
 
 
@@ -97,16 +96,23 @@ func pursuit():
 # ATTACK the PLAYER
 func attack():
 	move(get_pos(), 0)
+	
 	## EXIT
 	# ATTACK -> previous STATE
 	if get_pos().distance_to(target.get_pos()) > ATTACK_RANGE:
 		StackFSM.pop_state()
 	
+	if got_hit:
+		StackFSM.push_state(STATE_HIT)
 	pass
 
 
 # HIT STATE -----------------------------------------------------------------------------
 # When SELF is damaged
 func hit():
+	knocked_back()
 	
+	if get_linear_velocity().abs() <= Vector2(50,50):
+		got_hit = false
+		StackFSM.pop_state()
 	pass

@@ -34,6 +34,7 @@ func init_variable():
 # PATROLING
 func wander():
 	body.wander_timer.set_active(true)
+	body.direction = target_dir
 	
 	if body.ground_check():
 		# Check for platform edges
