@@ -1,15 +1,15 @@
-extends "res://scripts/Enemy.gd"
+extends "res://Enemy/Enemy.gd"
 
 # preload classes
-var WanderBehavior  = preload("res://scripts/AI Behaviors/WanderBehavior.gd")
-var PursuitBehavior = preload("res://scripts/AI Behaviors/PursuitBehavior.gd")
-var StackFSM        = preload("res://scripts/StackFSM.gd")
+var WanderBehavior  = preload("res://Enemy/AI Scripts/Behaviors/WanderBehavior.gd")
+var PursuitBehavior = preload("res://Enemy/AI Scripts/Behaviors/PursuitBehavior.gd")
+var StackFSM        = preload("res://Enemy/AI Scripts/StackFSM.gd")
 
 # STATES
 var STATE_WANDER  = "wander"
 var STATE_PURSUIT = "pursuit"
 var STATE_ATTACK  = "attack"
-var STATE_HIT     = "hit"
+var STATE_HURT    = "hurt"
 
 # READY
 func _ready():
@@ -27,8 +27,14 @@ func _fixed_process(delta):
 	update()
 	pass
 
-func get_current_state():
-	return StackFSM.get_current_state()
+func _draw():
+	if DEBUG_MODE:
+		draw_circle(Vector2(0,0), PURSUIT_RANGE, Color(0, 1, 0, 0.1))
+		var prev_item = get_pos()
+		for item in PursuitBehavior.traces:
+			draw_line(prev_item-get_pos(), item-get_pos(), Color(0,0,1), 2)
+			draw_circle(item-get_pos(), 10, Color(0,0,1))
+			prev_item = item
 	pass
 
 func play_anim(name):
@@ -37,23 +43,27 @@ func play_anim(name):
 		anim.play(name)
 	pass
 
-func _draw():
-	draw_circle(Vector2(0,0), PURSUIT_RANGE, Color(0, 1, 0, 0.1))
-	var prev_item = get_pos()
-	for item in PursuitBehavior.traces:
-		draw_line(prev_item-get_pos(), item-get_pos(), Color(0,0,1), 2)
-		draw_circle(item-get_pos(), 10, Color(0,0,1))
-		prev_item = item
+# Call this to be idle
+func idle():
+	move(get_pos(), 0)
+	play_anim("idle")
+	pass
+
+# For STATE that needs to be readily accessed at any given time
+# Ex: The enemy can take damage (a.k.a switch to HURT state) at any moment
+func omnipresent():
+	# WHATEVER -> HIT
+	if is_hurt:
+		StackFSM.push_state(STATE_HURT)
 	pass
 
 # WANDER STATE ------------------------------------------------------------------------
 # WANDERING and IDLING
 func wander():
 	WanderBehavior.wander()
-	if get_linear_velocity() == Vector2(0,0):
-		play_anim("idle")
-	else:
-		play_anim("wander")
+	
+	## EXIT
+	omnipresent()
 	
 	## EXIT
 	# WANDER -> PURSUIT
@@ -64,14 +74,15 @@ func wander():
 			StackFSM.pop_state()
 			StackFSM.push_state(STATE_PURSUIT)
 	
-	if got_hit:
-		StackFSM.push_state(STATE_HIT)
 	pass
 
 # PURSUIT STATE -----------------------------------------------------------------------
 # PURSUIT the PLAYER when they are detected
 func pursuit():
 	PursuitBehavior.pursuit()
+	
+	## EXIT
+	omnipresent()
 	
 	## EXIT
 	# PURSUIT -> WANDER
@@ -82,12 +93,10 @@ func pursuit():
 	
 	## EXIT
 	# PURSUIT -> ATTACK
-	if get_pos().distance_to(target.get_pos()) <= ATTACK_RANGE:
+	if get_pos().distance_to(target.get_pos()) <= ATTACK_RANGE and ground_check():
 		PursuitBehavior.exit()
 		StackFSM.push_state(STATE_ATTACK)
 	
-	if got_hit:
-		StackFSM.push_state(STATE_HIT)
 	pass
 
 
@@ -95,24 +104,25 @@ func pursuit():
 # ATTACK STATE -------------------------------------------------------------------------
 # ATTACK the PLAYER
 func attack():
-	move(get_pos(), 0)
+	idle()
+	
+	## EXIT
+	omnipresent()
 	
 	## EXIT
 	# ATTACK -> previous STATE
-	if get_pos().distance_to(target.get_pos()) > ATTACK_RANGE:
+	if get_pos().distance_to(target.get_pos()) > ATTACK_RANGE or !ground_check():
 		StackFSM.pop_state()
 	
-	if got_hit:
-		StackFSM.push_state(STATE_HIT)
 	pass
 
 
 # HIT STATE -----------------------------------------------------------------------------
 # When SELF is damaged
-func hit():
+func hurt():
 	knocked_back()
 	
 	if get_linear_velocity().abs() <= Vector2(50,50):
-		got_hit = false
+		is_hurt = false
 		StackFSM.pop_state()
 	pass

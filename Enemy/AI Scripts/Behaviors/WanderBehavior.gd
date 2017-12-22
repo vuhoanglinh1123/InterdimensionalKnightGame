@@ -27,7 +27,7 @@ func init_variable():
 	body.wander_timer.set_wait_time(0.1)
 	body.wander_timer.set_one_shot(true)
 	body.wander_timer.start()
-	acc_time = body.MAX_VELOCITY / (body.ACCELERATION * 100)
+	acc_time = 0
 	pass
 
 ## BEHAVIOR SCRIPT
@@ -52,8 +52,9 @@ func wander():
 	set_target()
 	if can_walk:
 		body.move(target, body.MAX_VELOCITY)
+		body.play_anim("wander")
 	else:
-		body.move(target, 0)
+		body.idle()
 	pass
 
 func on_timer_timeout():

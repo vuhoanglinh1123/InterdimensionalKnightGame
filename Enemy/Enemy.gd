@@ -13,13 +13,13 @@ onready var wander_timer = get_node("wander_timer")
 
 # Character
 # export var
-export (int) var MAX_HEALTH     = 10
+export (bool) var DEBUG_MODE    = false
 export (int) var EXTRA_GRAVITY  = 2500
-export (int) var ACCELERATION   = 100
+export (int) var MAX_HEALTH     = 10
 export (int) var MAX_VELOCITY   = 300
-export (int) var JUMP_FORCE     = 800
+export (int) var JUMP_FORCE     = 1200
 export (int) var PURSUIT_RANGE  = 1200
-export (int) var CHASE_VELOCITY = 300
+export (int) var PURSUIT_VELOCITY = 300
 export (int) var ATTACK_RANGE   = 200
 
 # Character
@@ -27,7 +27,7 @@ export (int) var ATTACK_RANGE   = 200
 var cur_health = 0
 var speed      = Vector2()
 var direction  = 1
-var got_hit    = false 
+var is_hurt    = false 
 
 func _ready():
 	set_process(true)
@@ -71,18 +71,20 @@ func ground_check():
 	else:
 		return false
 	pass
+
 var dir
 var push_force
 
-# Character
+# Receive damage stats
 func damaged(damage, direction, push_back_force):
-	got_hit = true
+	is_hurt = true
 	cur_health -= damage
 	dir = -direction
 	push_force = push_back_force * direction + get_pos()
 	set_axis_velocity(Vector2(0,push_back_force.y))
 	pass
 
+# To actually got knocked back
 func knocked_back():
 	move(push_force, push_force.x)
 	direction = dir

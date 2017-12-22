@@ -2,10 +2,11 @@ extends RigidBody2D
 
 ##EXPORT VAR
 export var run_max_speed = 800
-export var jump_force = 800
+export var jump_force = 1200
 export var extra_gravity = 2500
 export var accerleration = 100
 export var max_health = 20
+
 ##onready
 onready var flip = get_node("flip")
 onready var ground_detector = get_node("ground_detector")

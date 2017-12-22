@@ -7,7 +7,6 @@ var body_position
 var target_position
 var traces
 var trace_range
-var jump_count
 
 
 func _init(body):
@@ -20,7 +19,6 @@ func init_variable():
 	target_position = body.target.get_pos()
 	trace_range = 200
 	traces = Array()
-	jump_count = 0
 	pass
 
 # Check whether PLAYER is out of SELF range
@@ -32,7 +30,7 @@ func is_player_out_of_range():
 		return false
 	pass
 
-# Rush to the PLAYER in CHASE state
+# Rush to the PLAYER in PURSUIT state
 func pursuit():
 	body_position   = body.get_pos()
 	target_position = body.target.get_pos()
@@ -52,10 +50,11 @@ func set_trace():
 	# To avoid making too many traces
 	if traces.size() > round(body.PURSUIT_RANGE/trace_range):
 		traces.pop_front()
+	
 	pass
 
 func move_to_next_trace():
-	body.move(traces.front(), body.CHASE_VELOCITY)
+	body.move(traces.front(), body.PURSUIT_VELOCITY)
 	
 	# Detect when to jump
 	if body_position.y > traces.front().y + 50:
@@ -72,9 +71,9 @@ func move_to_next_trace():
 func jump():
 	if body.ground_check():
 		body.set_axis_velocity(Vector2(0, -body.JUMP_FORCE))
+		body.play_anim("jump")
 	pass
 
 func exit():
-	jump_count = 0
 	traces.clear()
 	pass

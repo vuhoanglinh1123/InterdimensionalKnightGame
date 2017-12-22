@@ -1,7 +1,7 @@
-extends "res://scripts/Character.gd"
+extends "res://Character/Character.gd"
 
 ##import
-var input_states = preload("res://scripts/input_states.gd")
+var input_states = preload("res://Utils/InputStates.gd")
 
 #inputs
 var btn_left = input_states.new("btn_left")
@@ -95,6 +95,9 @@ func state_air(delta):
 		move( direction * run_max_speed, accerleration)
 	else:
 		move(0, accerleration)
+	
+	if btn_up.check() == 1:
+		jump(jump_force)
 	#state
 	if ground_check():
 		state_next = "ground"
