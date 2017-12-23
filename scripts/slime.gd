@@ -1,4 +1,8 @@
-extends "res://scripts/AI Behaviors/AttackBehavior.gd"
+extends "res://scripts/Enemy.gd"
+
+# preload classes
+var PatrolBehavior  = preload("res://scripts/AI Behaviors/PatrolBehavior.gd")
+var PursuitBehavior = preload("res://scripts/AI Behaviors/PursuitBehavior.gd")
 
 # states
 var STATE_PATROL  = "Patrol"
@@ -14,6 +18,8 @@ var atk_move   = ""
 # READY
 func _ready():
 	set_fixed_process(true)
+	PatrolBehavior  = PatrolBehavior.new(self)
+	PursuitBehavior = PursuitBehavior.new(self)
 	pass
 
 # FIXED PROCESS
@@ -27,11 +33,11 @@ func stateSwitching(delta):
 	if state == STATE_PATROL:
 		patrolState(delta)
 	elif state == STATE_PURSUIT:
-		pursuit_state(delta)
+		pursuitState(delta)
 	elif state == STATE_ATTACK:
-		attack_state(delta)
+		attackState(delta)
 	elif state == STATE_HIT:
-		hit_state(delta)
+		hitState(delta)
 	pass
 
 func stateExiting():
@@ -63,13 +69,13 @@ func statePlayAnim():
 	pass
 
 
+
 ## FINITE STATE MACHINE
 
 # PATROL STATE ------------------------------------------------------------------------
 # PATROLING and IDLING
 func patrolState(delta):
-	# SUPER
-	patrolBehavior(delta)
+	PatrolBehavior.patrol(delta)
 	
 	## EXIT
 	# PATROL -> PURSUIT
@@ -82,12 +88,12 @@ func patrolState(delta):
 
 # PURSUIT STATE -----------------------------------------------------------------------
 # PURSUIT the PLAYER when they are detected
-func pursuit_state(delta):
-	pursuitBehavior()
+func pursuitState(delta):
+	PursuitBehavior.pursuit()
 	
 	## EXIT
 	# PURSUIT -> PATROL
-	if is_player_out_of_range():
+	if PursuitBehavior.is_player_out_of_range():
 		stateExiting()
 		next_state = STATE_PATROL
 	pass
@@ -102,8 +108,8 @@ func _on_attack_range_body_enter( body ):
 
 # ATTACK STATE -------------------------------------------------------------------------
 # ATTACK the PLAYER
-func attack_state(delta):
-	attackBehavior()
+func attackState(delta):
+	
 	pass
 
 ## EXIT
@@ -116,6 +122,6 @@ func _on_attack_range_body_exit( body ):
 
 # HIT STATE -----------------------------------------------------------------------------
 # When SELF is damaged
-func hit_state(delta):
+func hitState(delta):
 	
 	pass
