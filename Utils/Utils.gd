@@ -2,6 +2,11 @@
 
 extends Node
 
+#enum
+enum STATUS{
+	POISON = 1
+}
+
 var process_time = 0   # elapsed time since the start of the game
 var fixed_process_time = 0
 
