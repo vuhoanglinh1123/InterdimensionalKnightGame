@@ -18,6 +18,7 @@ func _ready():
 	state_next = "air"
 	pass
 
+
 func switchState(delta):
 	#state machine
 	state = state_next
@@ -26,6 +27,8 @@ func switchState(delta):
 		state_air(delta)
 	elif state == "ground":
 		state_ground(delta)
+	elif state == "hurt":
+		state_hurt(delta)
 	elif state == "atk1":
 		state_atk1(delta)
 	elif state == "atk2":
@@ -33,6 +36,13 @@ func switchState(delta):
 		
 	#animation
 	flip.set_scale(Vector2(direction,1))
+	pass
+
+##ovrride damaged
+func damaged(damage, direction, push_back_force):
+	.damaged(damage, direction, push_back_force)
+	state_next = "hurt"
+	ground_detector.set_enabled(false)
 	pass
 
 ##FUNCTION
@@ -95,3 +105,12 @@ func state_air(delta):
 #atk1
 func state_atk1(delta):
 	weapon.state_atk1(delta)
+	pass
+
+#state hurt
+func state_hurt(delta):
+	
+	if ground_check():
+		state_next = "ground"
+	ground_detector.set_enabled(true)
+	pass

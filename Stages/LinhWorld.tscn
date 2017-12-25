@@ -12,6 +12,7 @@
 [node name="player" parent="." instance=ExtResource( 1 )]
 
 transform/pos = Vector2( 814.304, 112.034 )
+friction = 1.0
 
 [node name="grounds" type="Node" parent="."]
 
