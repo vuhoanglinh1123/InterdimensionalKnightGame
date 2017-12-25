@@ -1,4 +1,6 @@
 extends RigidBody2D
+##PRELOAD
+var StatusArray = preload("res://Status/StatusArray.gd")
 
 ##EXPORT VAR
 export (int) var MAX_RUN_SPEED = 800
@@ -28,7 +30,7 @@ var state = ""
 var state_next = ""
 
 ##ELEMENTS_HARMFUL
-var status_array = Array()
+var status_array = StatusArray.new()
 
 
 func _ready():
@@ -90,31 +92,17 @@ func damaged(damage, direction, push_back_force):
 	pass
 
 ##to apply element
-#func applyElement(status, status_time):
-#	element_next = status
-#	
-#	if status == "poison":
-#		element_poison_duration = status_time
-#	pass
+func apply_status(type, duration, level):
+	var new_status = Utils.creat_status(type, self, duration, level)
+	status_array.add(new_status)
+	pass
 
 #make element effect run
 func active_status(delta):
 	for status in status_array:
-		if status.type == Utils.ELEMENT.POISON:
-			status.duration -= delta
-			active_poison(status.level)
-			if not status.has_stat_debug:
-				debug_poison(status.level)
-			pass
+		status.update()
 	pass
 
-func active_poison(level):
-	
-	pass
-
-func debug_poison(level):
-	
-	pass
 
 ##free instance when die
 func destroyed():
