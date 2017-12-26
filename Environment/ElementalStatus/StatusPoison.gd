@@ -1,4 +1,4 @@
-extends "res://Status/Status.gd"
+extends "res://Environment/ElementalStatus/Status.gd"
 
 var base_damage = 1
 

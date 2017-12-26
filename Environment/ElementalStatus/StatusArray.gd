@@ -17,9 +17,9 @@ func add(status):
 func update(delta):
 	var iter = list.size() - 1
 	while(iter >= 0):
-		if list[i].duration <= 0:
-			remove(list[i], i)
-		list[i].update(delta)
+		if list[iter].duration <= 0:
+			remove(list[iter], iter)
+		list[iter].update(delta)
 		iter -= 1
 	pass
 
