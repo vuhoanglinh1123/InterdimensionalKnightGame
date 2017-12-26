@@ -99,7 +99,7 @@ func apply_status(type, duration, level):
 
 #make element effect run
 func active_status(delta):
-	for status in status_array:
+	for status in status_array.list:
 		status.update()
 	pass
 
