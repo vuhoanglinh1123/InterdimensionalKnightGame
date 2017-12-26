@@ -15,16 +15,17 @@ func add(status):
 
 #update all status inside the array
 func update(delta):
-	for i in range(list.size()):
-		list[i].update(delta)
+	var iter = list.size() - 1
+	while(iter >= 0):
 		if list[i].duration <= 0:
 			remove(list[i], i)
-		pass
+		list[i].update(delta)
+		iter -= 1
 	pass
 
 #remove the status from the array
 #pos: its position inside the array
 func remove(status, pos):
 	status.rev_start_effect()
-	list.remove(i)
+	list.remove(pos)
 	pass

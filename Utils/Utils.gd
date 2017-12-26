@@ -2,7 +2,7 @@
 
 extends Node
 ##PRELOAD
-var StatusPoison = preload("res://Status/StatusPoison.gd")
+var StatusPoison = preload("res://Environment/ElementalStatus/StatusPoison.gd")
 #enum
 enum STATUS{
 	POISON = 1

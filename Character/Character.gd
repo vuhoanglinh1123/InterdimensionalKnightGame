@@ -1,6 +1,6 @@
 extends RigidBody2D
 ##PRELOAD
-var StatusArray = preload("res://Status/StatusArray.gd")
+var StatusArray = preload("res://Environment/ElementalStatus/StatusArray.gd")
 
 ##EXPORT VAR
 export (int) var MAX_RUN_SPEED = 800
