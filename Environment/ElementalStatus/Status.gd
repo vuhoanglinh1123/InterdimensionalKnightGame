@@ -10,6 +10,10 @@ var level = 0
 
 var type
 
+##FUNCREF: to change default function when the character has different reaction to 
+var start_effect = funcref(self, "start_effect")
+var rev_effect = funcref(self, "rev_start_effect")
+var tick_effect = funcref(self, "tick_effect")
 #function
 func _init(t, dur, lv):
 	target = t
@@ -19,6 +23,16 @@ func _init(t, dur, lv):
 
 #combine with other status, return true if can combine, false if not
 func combine(status):
+	pass
+
+#update call by array each process 
+func update(delta):
+	duration -= delta
+	timer += delta
+	if timer >= tick_time:
+		tick_effect.call_func()
+		timer = 0
+		
 	pass
 
 #effect happen when the status is added into array or combined 
@@ -31,14 +45,4 @@ func rev_start_effect():
 
 #call when timer == tick_time
 func tick_effect():
-	pass
-
-#update call by array each process 
-func update(delta):
-	duration -= delta
-	timer += delta
-	if timer >= tick_time:
-		tick_effect()
-		timer = 0
-		
 	pass

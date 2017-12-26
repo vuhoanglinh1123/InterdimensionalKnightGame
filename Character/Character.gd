@@ -25,6 +25,9 @@ var current_speed = Vector2()
 
 var cur_health = 0
 
+#status resistances
+var poison_resis = 0
+
 #states: "ground", "air",...
 var state = ""
 var state_next = ""
