@@ -3,7 +3,7 @@ extends "res://Character/Enemy/Enemy.gd"
 # preload classes
 var WanderBehavior  = preload("res://Character/Enemy/AI Scripts/Behaviors/WanderBehavior.gd")
 var PursuitBehavior = preload("res://Character/Enemy/AI Scripts/Behaviors/PursuitBehavior.gd")
-var StackFSM        = preload("res://Character/Enemy/AI Scripts/StackFSM.gd")
+var StackFSM        = preload("res://Utils/StackFSM.gd")
 
 # STATES
 var STATE_WANDER  = "wander"
