@@ -43,7 +43,7 @@ func _fixed_process(delta):
 	pass
 
 #decide what can you do in this state
-func state_atk1(delta):
+func state_atk1():
 	if user.btn_atk1.check() == 1:
 		atk1()
 	pass
@@ -91,7 +91,7 @@ func turnOffHitbox():
 
 func stopAtking():
 	atking = 0
-	user.state_next = "air"
+	user.state_machine.pop_state()
 	pass
 
 func _on_slash1_area_enter( area ):

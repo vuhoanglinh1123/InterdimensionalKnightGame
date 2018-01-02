@@ -3,6 +3,9 @@ extends Node
 var body
 var stack
 
+var update_func
+var prev_state = ""
+
 func _init(body):
 	self.body = body
 	init_variable()
@@ -13,9 +16,12 @@ func init_variable():
 	pass
 
 func update():
-	if get_current_state() != null:
-		var function = funcref(body, get_current_state())
-		function.call_func()
+	var cur_state = get_current_state()
+	if cur_state != null:
+		if cur_state != prev_state:
+			update_func = funcref(body, cur_state)
+			prev_state = cur_state
+		update_func.call_func()
 	pass
 
 func pop_state():
