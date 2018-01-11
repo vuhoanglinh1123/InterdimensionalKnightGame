@@ -11,6 +11,7 @@ func add(status):
 			return
 	#cannot combine into anything
 	list.append(status)
+	status.start_effect.call_func()
 	pass
 
 #update all status inside the array
@@ -26,6 +27,6 @@ func update(delta):
 #remove the status from the array
 #pos: its position inside the array
 func remove(status, pos):
-	status.rev_start_effect()
+	status.rev_effect.call_func()
 	list.remove(pos)
 	pass

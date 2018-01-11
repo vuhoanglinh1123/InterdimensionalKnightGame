@@ -8,7 +8,7 @@ func _init(t, dur, lv).(t, dur, lv):
 func combine(status):
 	if status.type == Utils.STATUS.POISON:
 		#erase previous start effect
-		rev_start_effect()
+		rev_effect.call_func()
 		#upgrade level if combine with stronger poison
 		if level < status.level:
 			level = status.level
@@ -19,7 +19,7 @@ func combine(status):
 		else:
 			duration = (duration*level + status.duration*status.level)/(level+status.level)
 		#reapply effect
-		start_effect()
+		start_effect.call_func()
 		return true
 		pass
 	#no match type

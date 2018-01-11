@@ -3,6 +3,15 @@ extends "res://Character/Character.gd"
 ##import
 var input_states = preload("res://Utils/InputStates.gd")
 
+##CONST
+const STATE = {
+	GROUND = "state_ground",
+	AIR = "state_air",
+	ATK1 = "state_atk1",
+	ATK2 = "state_atk2",
+	HURT = "state_hurt"
+}
+
 #inputs
 var btn_left = input_states.new("btn_left")
 var btn_right = input_states.new("btn_right")
@@ -15,33 +24,18 @@ onready var weapon = flip.get_node("hitboxes")
 
 
 func _ready():
-	state_next = "air"
+	state_machine.push_state(STATE.AIR)
 	pass
 
-
-func switchState(delta):
-	#state machine
-	state = state_next
-	
-	if state == "air":
-		state_air(delta)
-	elif state == "ground":
-		state_ground(delta)
-	elif state == "hurt":
-		state_hurt(delta)
-	elif state == "atk1":
-		state_atk1(delta)
-	elif state == "atk2":
-		state_atk2(delta)
-		
-	#animation
-	flip.set_scale(Vector2(direction,1))
+func update_state():
+	state_machine.update()
 	pass
 
 ##ovrride damaged
 func damaged(damage, direction, push_back_force):
 	.damaged(damage, direction, push_back_force)
-	state_next = "hurt"
+	state_machine.pop_state()
+	state_machine.push_state(STATE.HURT)
 	ground_detector.set_enabled(false)
 	pass
 
@@ -61,7 +55,7 @@ func jump(force):
 ##STATES
 
 #ground
-func state_ground(delta):
+func state_ground():
 	#inputs
 	if btn_left.check() == 2:
 		direction = -1
@@ -76,18 +70,18 @@ func state_ground(delta):
 	if btn_up.check() == 1:
 		jump(jump_force)
 	elif btn_atk1.check() == 1:
-		state_next = "atk1"
+		state_machine.push_state(STATE.ATK1)
 		weapon.atk1()
 
 	
 	#check state
 	if !ground_check():
-		state_next = "air"
-	
+		state_machine.pop_state()
+		state_machine.push_state(STATE.AIR)
 	pass
 	
 #air
-func state_air(delta):
+func state_air():
 	#inputs
 	if btn_left.check() == 2:
 		direction = -1
@@ -99,18 +93,20 @@ func state_air(delta):
 		move(0, accerleration)
 	#state
 	if ground_check():
-		state_next = "ground"
+		state_machine.pop_state()
+		state_machine.push_state(STATE.GROUND)
 	pass
 
 #atk1
-func state_atk1(delta):
-	weapon.state_atk1(delta)
+func state_atk1():
+	weapon.state_atk1()
 	pass
 
 #state hurt
-func state_hurt(delta):
+func state_hurt():
 	
 	if ground_check():
-		state_next = "ground"
+		state_machine.pop_state()
+		state_machine.push_state(STATE.GROUND)
 	ground_detector.set_enabled(true)
 	pass

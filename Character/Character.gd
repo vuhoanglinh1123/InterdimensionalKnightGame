@@ -1,7 +1,7 @@
 extends RigidBody2D
 ##PRELOAD
 var StatusArray = preload("res://Environment/ElementalStatus/StatusArray.gd")
-
+var StackFSM = preload("res://Utils/StackFSM.gd")
 ##EXPORT VAR
 export (int) var MAX_RUN_SPEED = 800
 export (int) var JUMP_FORCE = 800
@@ -25,9 +25,11 @@ var current_speed = Vector2()
 
 var cur_health = 0
 
+#status resistances
+var poison_resis = 0
+
 #states: "ground", "air",...
-var state = ""
-var state_next = ""
+var state_machine = StackFSM.new(self)
 
 ##ELEMENTS_HARMFUL
 var status_array = StatusArray.new()
@@ -44,14 +46,13 @@ func _ready():
 	cur_health = max_health
 	pass
 
-func _fixed_process(delta):
-	
+func _integrate_forces(state):
 	#call switch state
-	switchState(delta)
+	flip.set_scale(Vector2(direction,1))
+	update_state()
 	#call destroyed
 	destroyed()
 	pass
-
 func _process(delta):
 	active_status(delta)
 	pass
@@ -77,10 +78,8 @@ func ground_check():
 
 ##OVERRIDE
 #override this for switching state, 
-func switchState(delta):
-	
+func update_state():
 	pass
-
 #
 ##damaged: Can be extend depend character
 #direction: push direction in x-axis
