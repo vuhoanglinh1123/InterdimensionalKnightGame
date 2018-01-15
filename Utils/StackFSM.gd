@@ -1,18 +1,13 @@
 extends Node
 
 var body
-var stack
+var stack = Array()
 
 var update_func
 var prev_state = ""
 
 func _init(body):
 	self.body = body
-	init_variable()
-	pass
-
-func init_variable():
-	stack = Array()
 	pass
 
 func update():
@@ -34,8 +29,8 @@ func push_state(state):
 	pass
 
 func get_current_state():
-	if not stack.empty():
-		return stack.back()
-	else:
+	if stack.empty():
 		return null
+	else:
+		return stack.back()
 	pass

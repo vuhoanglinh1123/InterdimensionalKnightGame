@@ -12,6 +12,8 @@ onready var health_label = get_node("health_label")
 onready var element_label = get_node("element_label")
 onready var anim_label = get_node("anim_label")
 
+var state_machine
+
 #var
 var state_label_begin = "State: "
 var atk_state_label_begin = "Atk State:"
@@ -22,6 +24,8 @@ var velocity_label_begin = "Velocity: "
 
 func _ready():
 	if target.DEBUG_MODE:
+		if target.state_machine != null:
+			state_machine = target.state_machine
 		set_process(true)
 		set_hidden(false)
 	else:
@@ -29,16 +33,12 @@ func _ready():
 	pass
 
 func _process(delta):
-	if target.StackFSM != null:
-		state_label.set_text(state_label_begin + str(target.StackFSM.get_current_state()))
+	
+	state_label.set_text(state_label_begin + str(state_machine.get_current_state()))
 	
 	linear_velocity_label.set_text(velocity_label_begin + str(target.get_linear_velocity()) )
 	
-#	atk_state_label.set_text(atk_state_label_begin + target.atk_move)
-	
 	health_label.set_text(health_label_begin + str(target.cur_health) )
-	
-#	element_label.set_text(element_label_begin + target.element)
 	
 	anim_label.set_text(anim_label_begin + str(target.anim.get_current_animation()))
 	pass

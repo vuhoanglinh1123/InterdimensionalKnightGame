@@ -63,6 +63,8 @@ func move_to_next_trace():
 		else:
 			# won't jump if BODY and TARGET is on the same ground
 			traces.pop_front()
+#	elif body_position.y <= traces.front().y:
+#		# TODO
 	# Remove the trace when BODY gets close to it
 	elif body_position.distance_to(traces.front()) <= trace_range:
 		traces.pop_front()
@@ -71,7 +73,7 @@ func move_to_next_trace():
 func jump():
 	if body.ground_check():
 		body.set_axis_velocity(Vector2(0, -body.JUMP_FORCE))
-		body.play_anim("jump")
+		body.play_loop_anim("jump")
 	pass
 
 func exit():

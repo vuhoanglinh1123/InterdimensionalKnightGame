@@ -1,5 +1,7 @@
 extends RigidBody2D
 
+var StackFSM = preload("res://Utils/StackFSM.gd")
+
 # onready var
 onready var flip        = get_node("flip")  # Character
 onready var ground_dt   = get_node("ground_detector") # Character
@@ -22,12 +24,14 @@ export (int) var PURSUIT_RANGE  = 1200
 export (int) var PURSUIT_VELOCITY = 300
 export (int) var ATTACK_RANGE   = 200
 
+# init the StateMachine
+var state_machine = StackFSM.new(self)
+
 # Character
 # stats
 var cur_health = 0
 var speed      = Vector2()
 var direction  = 1
-var is_hurt    = false 
 
 func _ready():
 	set_process(true)
@@ -72,23 +76,14 @@ func ground_check():
 		return false
 	pass
 
-var dir
-var push_force
-
-# Receive damage stats
 func damaged(damage, direction, push_back_force):
-	is_hurt = true
 	cur_health -= damage
 	set_linear_velocity(Vector2(push_back_force.x*direction, push_back_force.y))
-	flip.set_scale(Vector2( direction , 1))
-#	cur_health -= damage
-#	dir = -direction
-#	push_force = push_back_force * direction #+ get_pos()
-#	set_axis_velocity(Vector2(0,push_back_force.y))
+	self.direction = -direction
 	pass
 
-# To actually got knocked back
-func knocked_back():
-	move(push_force, push_force.x)
-	direction = dir
+# Handle looped animations
+func play_loop_anim(name):
+	if anim.get_current_animation() != name:
+		anim.play(name)
 	pass

@@ -44,30 +44,35 @@ transform/pos = Vector2( 3946, 0 )
 
 [node name="platform" parent="platforms" instance=ExtResource( 4 )]
 
-transform/pos = Vector2( 960, 350 )
+transform/pos = Vector2( 2204.6, 337.386 )
 one_way_collision/direction = Vector2( 0, 1 )
 
-[node name="platform1" parent="platforms" instance=ExtResource( 4 )]
+[node name="platform 2" parent="platforms" instance=ExtResource( 4 )]
 
-transform/pos = Vector2( 1760, 130 )
+transform/pos = Vector2( 2827.36, -232.464 )
 
-[node name="platform2" parent="platforms" instance=ExtResource( 4 )]
+[node name="platform 3" parent="platforms" instance=ExtResource( 4 )]
 
-transform/pos = Vector2( 2510, 130 )
+transform/pos = Vector2( 1969.51, -79.933 )
 
-[node name="platform3" parent="platforms" instance=ExtResource( 4 )]
+[node name="platform 4" parent="platforms" instance=ExtResource( 4 )]
 
-transform/pos = Vector2( 3260, 130 )
+transform/pos = Vector2( 1582.52, 148.362 )
+
+[node name="platform 5" parent="platforms" instance=ExtResource( 4 )]
+
+transform/pos = Vector2( 2417.72, -412.064 )
 
 [node name="enemies" type="Node" parent="."]
 
 [node name="sandbag" parent="enemies" instance=ExtResource( 5 )]
 
-transform/pos = Vector2( 1941.85, 390.425 )
+transform/pos = Vector2( 2141.17, -237.404 )
 
 [node name="slime" parent="enemies" instance=ExtResource( 6 )]
 
-transform/pos = Vector2( 1513.71, 29.4332 )
+transform/pos = Vector2( 1146.11, 333.655 )
 DEBUG_MODE = true
+MAX_HEALTH = 1000
 
 

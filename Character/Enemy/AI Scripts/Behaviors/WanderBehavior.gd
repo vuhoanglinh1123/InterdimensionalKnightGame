@@ -52,7 +52,7 @@ func wander():
 	set_target()
 	if can_walk:
 		body.move(target, body.MAX_VELOCITY)
-		body.play_anim("wander")
+		body.play_loop_anim("wander")
 	else:
 		body.idle()
 	pass

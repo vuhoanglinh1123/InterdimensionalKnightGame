@@ -3,27 +3,26 @@ extends "res://Character/Enemy/Enemy.gd"
 # preload classes
 var WanderBehavior  = preload("res://Character/Enemy/AI Scripts/Behaviors/WanderBehavior.gd")
 var PursuitBehavior = preload("res://Character/Enemy/AI Scripts/Behaviors/PursuitBehavior.gd")
-var StackFSM        = preload("res://Utils/StackFSM.gd")
 
 # STATES
-var STATE_WANDER  = "wander"
-var STATE_PURSUIT = "pursuit"
-var STATE_ATTACK  = "attack"
-var STATE_HURT    = "hurt"
+const STATE = { 
+	WANDER = "wander",
+	PURSUIT = "pursuit",
+	ATTACK = "attack",
+	HURT = "hurt"
+}
 
 # READY
 func _ready():
 	set_fixed_process(true)
 	WanderBehavior  = WanderBehavior.new(self)
 	PursuitBehavior = PursuitBehavior.new(self)
-	StackFSM        = StackFSM.new(self)
-	StackFSM.push_state(STATE_WANDER)
-	update()
+	state_machine.push_state(STATE.WANDER)
 	pass
 
 # FIXED PROCESS
 func _fixed_process(delta):
-	StackFSM.update()
+	state_machine.update()
 	update()
 	pass
 
@@ -37,25 +36,20 @@ func _draw():
 			prev_item = item
 	pass
 
-func play_anim(name):
-	if anim.get_current_animation() != name:
-		anim.stop()
-		anim.play(name)
-	pass
-
 # Call this to be idle
 func idle():
 	move(get_pos(), 0)
-	play_anim("idle")
+	play_loop_anim("idle")
 	pass
 
-# For STATE that needs to be readily accessed at any given time
-# Ex: The enemy can take damage (a.k.a switch to HURT state) at any moment
-func omnipresent():
-	# WHATEVER -> HIT
-	if is_hurt:
-		StackFSM.push_state(STATE_HURT)
+# Override
+func damaged(damage, direction, push_back_force):
+	.damaged(damage, direction, push_back_force)
+	state_machine.pop_state()
+	state_machine.push_state(STATE.HURT)
+	anim.play("hurt")
 	pass
+
 
 # WANDER STATE ------------------------------------------------------------------------
 # WANDERING and IDLING
@@ -63,16 +57,13 @@ func wander():
 	WanderBehavior.wander()
 	
 	## EXIT
-	omnipresent()
-	
-	## EXIT
 	# WANDER -> PURSUIT
 	if player_dt.is_colliding():
 		var body = player_dt.get_collider()
 		if body.is_in_group("PLAYER"):
 			WanderBehavior.exit()
-			StackFSM.pop_state()
-			StackFSM.push_state(STATE_PURSUIT)
+			state_machine.pop_state()
+			state_machine.push_state(STATE.PURSUIT)
 	
 	pass
 
@@ -82,20 +73,17 @@ func pursuit():
 	PursuitBehavior.pursuit()
 	
 	## EXIT
-	omnipresent()
-	
-	## EXIT
 	# PURSUIT -> WANDER
 	if PursuitBehavior.is_player_out_of_range():
 		PursuitBehavior.exit()
-		StackFSM.pop_state()
-		StackFSM.push_state(STATE_WANDER)
+		state_machine.pop_state()
+		state_machine.push_state(STATE.WANDER)
 	
 	## EXIT
 	# PURSUIT -> ATTACK
 	if get_pos().distance_to(target.get_pos()) <= ATTACK_RANGE and ground_check():
 		PursuitBehavior.exit()
-		StackFSM.push_state(STATE_ATTACK)
+		state_machine.push_state(STATE.ATTACK)
 	
 	pass
 
@@ -107,22 +95,16 @@ func attack():
 	idle()
 	
 	## EXIT
-	omnipresent()
-	
-	## EXIT
 	# ATTACK -> previous STATE
 	if get_pos().distance_to(target.get_pos()) > ATTACK_RANGE or !ground_check():
-		StackFSM.pop_state()
-	
+		state_machine.pop_state()
 	pass
 
 
 # HIT STATE -----------------------------------------------------------------------------
 # When SELF is damaged
 func hurt():
-#	knocked_back()
-	
-	if get_linear_velocity().abs() <= Vector2(50,50):
-		is_hurt = false
-		StackFSM.pop_state()
+	if ground_check() and not anim.is_playing():
+		state_machine.pop_state()
+		state_machine.push_state(STATE.PURSUIT)
 	pass
