@@ -98,7 +98,7 @@ func pursuit():
 # ATTACK STATE -------------------------------------------------------------------------
 # ATTACK the PLAYER
 func attack():
-	idle()
+	play_loop_anim("attack")
 	
 	## EXIT
 	# ATTACK -> previous STATE

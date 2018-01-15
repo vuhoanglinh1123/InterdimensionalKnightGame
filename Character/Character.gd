@@ -81,13 +81,12 @@ func ground_check():
 func update_state():
 	pass
 #
-##damaged: Can be extend depend character
+##take_damage: Can be extend depend character
 #direction: push direction in x-axis
-func damaged(damage, direction, push_back_force):
+func take_damage(damage, direction, push_back_force):
 	cur_health -= damage
 	set_linear_velocity(Vector2(push_back_force.x*direction, push_back_force.y))
-	flip.set_scale(Vector2( direction , 1))
-	
+	self.direction = -direction
 	pass
 
 ##to apply element

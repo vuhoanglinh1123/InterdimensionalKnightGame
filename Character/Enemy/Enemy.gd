@@ -9,7 +9,7 @@ onready var bound_dt_1  = get_node("bound_detector_1")
 onready var bound_dt_2  = get_node("bound_detector_2")
 onready var wall_dt     = flip.get_node("wall_detector")
 onready var player_dt   = flip.get_node("player_detector")
-onready var anim        = flip.get_node("Sprite/anim") # Character
+onready var anim        = flip.get_node("sprite/anim") # Character
 onready var target      = Utils.get_main_node().get_node("player")
 onready var wander_timer = get_node("wander_timer")
 
@@ -32,6 +32,7 @@ var state_machine = StackFSM.new(self)
 var cur_health = 0
 var speed      = Vector2()
 var direction  = 1
+var status = "";
 
 func _ready():
 	set_process(true)
@@ -76,7 +77,7 @@ func ground_check():
 		return false
 	pass
 
-func damaged(damage, direction, push_back_force):
+func take_damage(damage, direction, push_back_force):
 	cur_health -= damage
 	set_linear_velocity(Vector2(push_back_force.x*direction, push_back_force.y))
 	self.direction = -direction

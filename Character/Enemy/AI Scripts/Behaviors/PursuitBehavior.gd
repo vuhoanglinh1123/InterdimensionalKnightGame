@@ -32,6 +32,8 @@ func is_player_out_of_range():
 
 # Rush to the PLAYER in PURSUIT state
 func pursuit():
+	body.play_loop_anim("wander")
+	
 	body_position   = body.get_pos()
 	target_position = body.target.get_pos()
 	set_trace()
@@ -73,7 +75,7 @@ func move_to_next_trace():
 func jump():
 	if body.ground_check():
 		body.set_axis_velocity(Vector2(0, -body.JUMP_FORCE))
-		body.play_loop_anim("jump")
+		body.anim.play("jump")
 	pass
 
 func exit():

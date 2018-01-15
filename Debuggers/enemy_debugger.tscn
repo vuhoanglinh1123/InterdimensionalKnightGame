@@ -1,9 +1,9 @@
 [gd_scene load_steps=3 format=1]
 
-[ext_resource path="res://Debuggers/SlimeDebugger.gd" type="Script" id=1]
+[ext_resource path="res://Debuggers/EnemyDebugger.gd" type="Script" id=1]
 [ext_resource path="res://Utils/Fonts/SFCartoonistHand/SFCartoonistHand-Bold.fnt" type="BitmapFont" id=2]
 
-[node name="slime_debugger" type="Control"]
+[node name="enemy_debugger" type="Control"]
 
 focus/ignore_mouse = false
 focus/stop_mouse = true

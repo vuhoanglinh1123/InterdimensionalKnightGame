@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=1]
+[gd_scene load_steps=8 format=1]
 
 [ext_resource path="res://Character/Player/player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Environment/Static/ground.tscn" type="PackedScene" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://Environment/Static/platform.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Character/Enemy/Sandbag/sandbag.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Character/Enemy/Slime/slime.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Character/Enemy/Ranger/ranger.tscn" type="PackedScene" id=7]
 
 [node name="world" type="Node"]
 
@@ -74,5 +75,9 @@ transform/pos = Vector2( 2141.17, -237.404 )
 transform/pos = Vector2( 1146.11, 333.655 )
 DEBUG_MODE = true
 MAX_HEALTH = 1000
+
+[node name="ranger" parent="enemies" instance=ExtResource( 7 )]
+
+transform/pos = Vector2( 232.95, 344.766 )
 
 

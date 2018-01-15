@@ -31,9 +31,9 @@ func update_state():
 	state_machine.update()
 	pass
 
-##ovrride damaged
-func damaged(damage, direction, push_back_force):
-	.damaged(damage, direction, push_back_force)
+##ovrride take_damage
+func take_damage(damage, direction, push_back_force):
+	.take_damage(damage, direction, push_back_force)
 	state_machine.pop_state()
 	state_machine.push_state(STATE.HURT)
 	ground_detector.set_enabled(false)
