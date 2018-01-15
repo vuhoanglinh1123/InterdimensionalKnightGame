@@ -16,6 +16,7 @@ const STATE = {
 var btn_left = input_states.new("btn_left")
 var btn_right = input_states.new("btn_right")
 var btn_up = input_states.new("btn_up")
+var btn_down = input_states.new("btn_down")
 var btn_atk1 = input_states.new("btn_atk1")
 var btn_atk2 = input_states.new("btn_atk2")
 
@@ -32,8 +33,8 @@ func update_state():
 	pass
 
 ##ovrride damaged
-func damaged(damage, direction, push_back_force):
-	.damaged(damage, direction, push_back_force)
+func take_damage(damage, direction, push_back_force):
+	.take_damage(damage, direction, push_back_force)
 	state_machine.pop_state()
 	state_machine.push_state(STATE.HURT)
 	ground_detector.set_enabled(false)

@@ -38,7 +38,6 @@ var status_array = StatusArray.new()
 func _ready():
 	init_variable()
 	#set fixed process
-	set_fixed_process(true)
 	set_process(true)
 	#apply gravity
 	set_applied_force(Vector2(0,extra_gravity))
@@ -83,7 +82,7 @@ func update_state():
 #
 ##damaged: Can be extend depend character
 #direction: push direction in x-axis
-func damaged(damage, direction, push_back_force):
+func take_damage(damage, direction, push_back_force):
 	cur_health -= damage
 	set_linear_velocity(Vector2(push_back_force.x*direction, push_back_force.y))
 	flip.set_scale(Vector2( direction , 1))
