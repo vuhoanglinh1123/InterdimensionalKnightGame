@@ -95,21 +95,21 @@ func stopAtking():
 	pass
 
 func _on_slash1_area_enter( area ):
-	if area.is_in_group("enermy_hurtbox"):
+	if area.is_in_group("ENEMY"):
 		direction = flip.get_scale().x
 		area.get_parent().take_damage(damage, direction,push_back_force)
 	pass # replace with function body
 
 
 func _on_slash2_area_enter( area ):
-	if area.is_in_group("enermy_hurtbox"):
+	if area.is_in_group("ENEMY"):
 		direction = flip.get_scale().x
 		area.get_parent().take_damage(damage*2, direction, push_back_force*1.5)
 	pass # replace with function body
 
 #
 func _on_thrust_area_enter( area ):
-	if area.is_in_group("enermy_hurtbox"):
+	if area.is_in_group("ENEMY"):
 		direction = flip.get_scale().x
 		area.get_parent().take_damage(damage, direction,push_back_force*1.75)
 	pass # replace with function body

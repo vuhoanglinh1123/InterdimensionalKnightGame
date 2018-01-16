@@ -12,11 +12,6 @@ const STATE = {
 	HURT = "hurt"
 }
 
-export var contact_damage = 0;
-export var atk_damage = 0;
-export var knockback_force = Vector2();
-export var element = "poison";
-
 # READY
 func _ready():
 	set_fixed_process(true)
@@ -34,7 +29,6 @@ func _fixed_process(delta):
 func _draw():
 	if DEBUG_MODE:
 		draw_circle(Vector2(0,0), PURSUIT_RANGE, Color(0, 1, 0, 0.1))
-		draw_line(Vector2(0,-10), Vector2(ATTACK_RANGE*direction, -10), Color(0, 1, 0, 1), 3)
 		var prev_item = get_pos()
 		for item in PursuitBehavior.traces:
 			draw_line(prev_item-get_pos(), item-get_pos(), Color(0,0,1), 2)
@@ -49,6 +43,7 @@ func idle():
 	pass
 
 # Override
+# Take damage when being attacked
 func take_damage(damage, direction, push_back_force):
 	.take_damage(damage, direction, push_back_force)
 	state_machine.pop_state()
@@ -56,6 +51,12 @@ func take_damage(damage, direction, push_back_force):
 	anim.play("hurt")
 	pass
 
+# Deal damage to PLAYER on contact
+func _on_hurtbox_area_enter( area ):
+	if area.is_in_group("PLAYER"):
+		var damage_dir = sign(target.get_pos().x - get_pos().x)
+		target.take_damage(CONTACT_DMG, damage_dir, KNOCKBACK_FORCE)
+	pass # replace with function body
 
 # WANDER STATE ------------------------------------------------------------------------
 # WANDERING and IDLING
@@ -65,11 +66,9 @@ func wander():
 	## EXIT
 	# WANDER -> PURSUIT
 	if player_dt.is_colliding():
-		var body = player_dt.get_collider()
-		if body.is_in_group("PLAYER"):
-			WanderBehavior.exit()
-			state_machine.pop_state()
-			state_machine.push_state(STATE.PURSUIT)
+		WanderBehavior.exit()
+		state_machine.pop_state()
+		state_machine.push_state(STATE.PURSUIT)
 	
 	pass
 
@@ -88,7 +87,7 @@ func pursuit():
 	
 	## EXIT
 	# PURSUIT -> ATTACK
-	if get_pos().distance_to(target.get_pos()) <= ATTACK_RANGE and ground_check():
+	if att_dt.is_colliding() and ground_check():
 		PursuitBehavior.exit()
 		state_machine.push_state(STATE.ATTACK)
 	
@@ -98,11 +97,11 @@ func pursuit():
 # ATTACK STATE -------------------------------------------------------------------------
 # ATTACK the PLAYER
 func attack():
-	idle()
+	play_loop_anim("attack")
 	
 	## EXIT
 	# ATTACK -> previous STATE
-	if get_pos().distance_to(target.get_pos()) > ATTACK_RANGE or !ground_check():
+	if not att_dt.is_colliding() or not ground_check():
 		state_machine.pop_state()
 	pass
 
@@ -114,3 +113,5 @@ func hurt():
 		state_machine.pop_state()
 		state_machine.push_state(STATE.PURSUIT)
 	pass
+
+

@@ -8,6 +8,7 @@ var target_position
 var traces
 var trace_range
 
+export var trace_amount = 10
 
 func _init(body):
 	self.body = body
@@ -17,7 +18,7 @@ func _init(body):
 func init_variable():
 	body_position   = body.get_pos()
 	target_position = body.target.get_pos()
-	trace_range = 200
+	trace_range = body.PURSUIT_RANGE/10
 	traces = Array()
 	pass
 
@@ -46,6 +47,7 @@ func set_trace():
 	if traces.empty():
 		traces.append(body_position)
 	
+	# Make a trace every "trace_range" distance
 	if traces.back().distance_to(target_position) >= trace_range:
 		traces.append(target_position)
 	
@@ -60,7 +62,7 @@ func move_to_next_trace():
 	
 	# Detect when to jump
 	if body_position.y > traces.front().y + 50:
-		if body_position.y > target_position.y + 50 and body.target.ground_check():
+		if body_position.y > target_position.y + 50 and body.target.ground_check() and body.JUMPABLE:
 			jump()
 		else:
 			# won't jump if BODY and TARGET is on the same ground
