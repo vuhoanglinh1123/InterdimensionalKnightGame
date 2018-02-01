@@ -38,7 +38,6 @@ var status_array = StatusArray.new()
 func _ready():
 	init_variable()
 	#set fixed process
-	set_fixed_process(true)
 	set_process(true)
 	#apply gravity
 	set_applied_force(Vector2(0,extra_gravity))
