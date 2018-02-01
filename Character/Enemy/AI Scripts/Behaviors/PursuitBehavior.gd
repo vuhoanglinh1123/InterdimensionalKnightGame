@@ -1,14 +1,14 @@
 extends Node2D
 
-const PLAYER_SIZE  = 128
+# Required variables:
+# PURSUIT_RANGE
+# PURSUIT_VELOCITY
 
 var body
 var body_position
 var target_position
 var traces
 var trace_range
-
-export var trace_amount = 10
 
 func _init(body):
 	self.body = body
@@ -18,23 +18,11 @@ func _init(body):
 func init_variable():
 	body_position   = body.get_pos()
 	target_position = body.target.get_pos()
-	trace_range = body.PURSUIT_RANGE/10
+	trace_range = round(body.PURSUIT_RANGE/body.TRACE_AMOUNT)
 	traces = Array()
 	pass
 
-# Check whether PLAYER is out of SELF range
-func is_player_out_of_range():
-	var distance_to_player = body.get_pos().distance_to(body.target.get_pos())
-	if distance_to_player > body.PURSUIT_RANGE + PLAYER_SIZE/2:
-		return true
-	else:
-		return false
-	pass
-
-# Rush to the PLAYER in PURSUIT state
 func pursuit():
-	body.play_loop_anim("wander")
-	
 	body_position   = body.get_pos()
 	target_position = body.target.get_pos()
 	set_trace()

@@ -1,16 +1,12 @@
 extends Node2D
 
-export (float) var MAX_WALK_TIME = 5
-export (float) var MAX_IDLE_TIME = 2
 
 # private var
 var body
-var idle_time
-var walk_time
-var acc_time
 var can_walk
 var target    # fake target to follow
 var target_dir
+var is_moving = false
 
 func _init(body):
 	self.body = body
@@ -18,8 +14,6 @@ func _init(body):
 	pass
 
 func init_variable():
-	idle_time = 0
-	walk_time = 0
 	can_walk  = true
 	target_dir = body.direction
 	set_target()
@@ -27,7 +21,6 @@ func init_variable():
 	body.wander_timer.set_wait_time(0.1)
 	body.wander_timer.set_one_shot(true)
 	body.wander_timer.start()
-	acc_time = 0
 	pass
 
 ## BEHAVIOR SCRIPT
@@ -52,19 +45,19 @@ func wander():
 	set_target()
 	if can_walk:
 		body.move(target, body.MAX_VELOCITY)
-		body.play_loop_anim("wander")
+		is_moving = true
 	else:
-		body.idle()
+		is_moving = false
 	pass
 
 func on_timer_timeout():
 	randomize()
 	if can_walk:
-		idle_time = rand_range(acc_time, MAX_IDLE_TIME)
+		var idle_time = rand_range(body.IDLE_TIME.x, body.IDLE_TIME.y)
 		body.wander_timer.set_wait_time(idle_time)
 		can_walk = false
 	else:
-		walk_time = rand_range(acc_time, MAX_WALK_TIME)
+		var walk_time = rand_range(body.WALK_TIME.x, body.WALK_TIME.y)
 		body.wander_timer.set_wait_time(walk_time)
 		# randomize the direction between -1 and 1
 		if round(randf()):
@@ -77,6 +70,10 @@ func on_timer_timeout():
 
 func set_target():
 	target = body.get_pos() + Vector2(100, 0) * target_dir
+	pass
+
+func is_wandering():
+	return is_moving
 	pass
 
 func exit():

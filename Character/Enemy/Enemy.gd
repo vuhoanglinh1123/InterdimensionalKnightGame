@@ -18,17 +18,20 @@ onready var wander_timer = get_node("wander_timer")
 # export var
 export (bool) var DEBUG_MODE    = false
 export (bool) var JUMPABLE      = false
-export (int) var EXTRA_GRAVITY  = 2500
 export (int) var MAX_HEALTH     = 10
+export (int) var ATK_DMG        = 0
+export (int) var CONTACT_DMG    = 0
+export (int) var EXTRA_GRAVITY  = 2500
 export (int) var MAX_VELOCITY   = 300
+export (int) var PURSUIT_VELOCITY = 300
 export (int) var JUMP_FORCE     = 1200
+export (Vector2) var KNOCKBACK_FORCE = Vector2(0, 0)
 export (int) var DETECT_RANGE   = 1200
 export (int) var PURSUIT_RANGE  = 1200
-export (int) var PURSUIT_VELOCITY = 300
 export (int) var ATTACK_RANGE   = 200
-export (int) var CONTACT_DMG = 0
-export (int) var ATK_DMG = 0
-export var KNOCKBACK_FORCE = Vector2()
+export (Vector2) var WALK_TIME  = Vector2(1, 6)
+export (Vector2) var IDLE_TIME  = Vector2(1, 3)
+export (int) var TRACE_AMOUNT   = 10
 export var ELEMENT = "none";
 
 # init the StateMachine
@@ -39,10 +42,12 @@ var state_machine = StackFSM.new(self)
 var cur_health = 0
 var speed      = Vector2()
 var direction  = 1
-var status = "";
+var current_state = ""
+var status = ""
 
 func _ready():
 	set_process(true)
+	set_fixed_process(true)
 	
 	ground_dt.add_exception(self)
 	wall_dt.add_exception(self)
@@ -74,11 +79,27 @@ func _process(delta):
 		queue_free()
 	pass
 
+# FIXED PROCESS
+func _fixed_process(delta):
+	state_machine.update()
+	update()
+	pass
+
 # define how SELF moves
 func move(target, max_velocity):
 	var position = get_pos()
 	var velocity = Vector2(target - get_pos()).normalized() * max_velocity
 	set_linear_velocity(Vector2(velocity.x, get_linear_velocity().y).floor())
+	pass
+
+func is_target_out_of_range(x_range, y_range):
+	var length_dist = abs(get_pos().x - target.get_pos().x)
+	var height_dist = abs(get_pos().y - target.get_pos().y)
+	
+	if length_dist >= x_range or height_dist >= y_range:
+		return true
+	else:
+		return false
 	pass
 
 # Character
@@ -102,4 +123,10 @@ func take_damage(damage, direction, push_back_force):
 func play_loop_anim(name):
 	if anim.get_current_animation() != name:
 		anim.play(name)
+	pass
+
+# Call this to be idle
+func idle():
+	move(get_pos(), 0)
+	play_loop_anim("idle")
 	pass

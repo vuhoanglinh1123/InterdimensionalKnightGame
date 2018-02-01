@@ -23,5 +23,5 @@ func _on_touch_body_area_enter( area ):
 #		push_back_force = area.get_parent().get_linear_velocity()
 #		area.get_parent().damaged(damage, direction, push_back_force)
 		var damage_dir = sign(target.get_pos().x - rotate.get_parent().get_pos().x)
-		target.damaged(0, damage_dir, Vector2(400,-400))
+		target.take_damage(0, damage_dir, Vector2(400,-400))
 	pass # replace with function body

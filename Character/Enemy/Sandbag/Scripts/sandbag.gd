@@ -30,8 +30,7 @@ func _ready():
 	element = element_next
 	pass
 	
-func damaged(damage, direction, push_back_force):
-	print(damage)
+func take_damage(damage, direction, push_back_force):
 	cur_health -= damage
 	set_linear_velocity(Vector2(push_back_force.x*direction, push_back_force.y))
 	rotate.set_scale(Vector2( direction , 1))

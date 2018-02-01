@@ -4,6 +4,7 @@ extends "res://Character/Enemy/Enemy.gd"
 var WanderBehavior  = preload("res://Character/Enemy/AI Scripts/Behaviors/WanderBehavior.gd")
 var PursuitBehavior = preload("res://Character/Enemy/AI Scripts/Behaviors/PursuitBehavior.gd")
 
+
 # STATES
 const STATE = { 
 	WANDER = "wander",
@@ -20,12 +21,6 @@ func _ready():
 	state_machine.push_state(STATE.WANDER)
 	pass
 
-# FIXED PROCESS
-func _fixed_process(delta):
-	state_machine.update()
-	update()
-	pass
-
 func _draw():
 	if DEBUG_MODE:
 		draw_circle(Vector2(0,0), PURSUIT_RANGE, Color(0, 1, 0, 0.1))
@@ -36,19 +31,13 @@ func _draw():
 			prev_item = item
 	pass
 
-# Call this to be idle
-func idle():
-	move(get_pos(), 0)
-	play_loop_anim("idle")
-	pass
-
 # Override
 # Take damage when being attacked
 func take_damage(damage, direction, push_back_force):
 	.take_damage(damage, direction, push_back_force)
 	state_machine.pop_state()
 	state_machine.push_state(STATE.HURT)
-	anim.play("hurt")
+	run_anim()
 	pass
 
 # Deal damage to PLAYER on contact
@@ -58,10 +47,29 @@ func _on_hurtbox_area_enter( area ):
 		target.take_damage(CONTACT_DMG, damage_dir, KNOCKBACK_FORCE)
 	pass # replace with function body
 
+## Animation handling
+func run_anim():
+	current_state = state_machine.get_current_state()
+	
+	if current_state == STATE.WANDER:
+		if WanderBehavior.is_wandering():
+			play_loop_anim("wander")
+		else:
+			idle()
+	elif current_state == STATE.PURSUIT:
+		play_loop_anim("pursuit")
+	elif current_state == STATE.HURT:
+		anim.stop()
+		anim.play("hurt")
+	
+	pass
+
+
 # WANDER STATE ------------------------------------------------------------------------
 # WANDERING and IDLING
 func wander():
 	WanderBehavior.wander()
+	run_anim()
 	
 	## EXIT
 	# WANDER -> PURSUIT
@@ -77,10 +85,11 @@ func wander():
 # PURSUIT the PLAYER when they are detected
 func pursuit():
 	PursuitBehavior.pursuit()
+	run_anim()
 	
 	## EXIT
 	# PURSUIT -> WANDER
-	if PursuitBehavior.is_player_out_of_range():
+	if is_target_out_of_range(PURSUIT_RANGE, OS.get_window_size().y):
 		PursuitBehavior.exit()
 		state_machine.pop_state()
 		state_machine.push_state(STATE.WANDER)
@@ -97,7 +106,6 @@ func pursuit():
 # ATTACK STATE -------------------------------------------------------------------------
 # ATTACK the PLAYER
 func attack():
-	play_loop_anim("attack")
 	
 	## EXIT
 	# ATTACK -> previous STATE
