@@ -11,7 +11,7 @@
 
 [node name="player" parent="." instance=ExtResource( 1 )]
 
-transform/pos = Vector2( 3004.14, 363.759 )
+transform/pos = Vector2( 2407.6, 206.125 )
 
 [node name="grounds" type="Node" parent="."]
 
@@ -65,10 +65,10 @@ transform/pos = Vector2( 2417.72, -412.064 )
 
 [node name="slime" parent="enemies" instance=ExtResource( 5 )]
 
-transform/pos = Vector2( 1607.77, 274.229 )
+transform/pos = Vector2( 1647.95, 373.137 )
 DEBUG_MODE = true
 JUMPABLE = true
-MAX_HEALTH = 1000
+MAX_HEALTH = 5
 PURSUIT_VELOCITY = 500
 KNOCKBACK_FORCE = Vector2( 200, -400 )
 DETECT_RANGE = 600
@@ -78,7 +78,6 @@ TRACE_AMOUNT = 4
 [node name="ranger" parent="enemies" instance=ExtResource( 6 )]
 
 transform/pos = Vector2( 2751, 252.715 )
-MAX_HEALTH = 1000
 PURSUIT_VELOCITY = 400
 KNOCKBACK_FORCE = Vector2( 200, -400 )
 PURSUIT_RANGE = 1600

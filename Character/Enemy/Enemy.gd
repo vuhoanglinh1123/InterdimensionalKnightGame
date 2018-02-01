@@ -14,6 +14,10 @@ onready var anim         = flip.get_node("sprite/anim") # Character
 onready var target       = Utils.get_main_node().get_node("player")
 onready var wander_timer = get_node("wander_timer")
 
+# Collision boxes
+onready var hurtbox = get_node("hurtbox")
+onready var physics_box = get_node("physics_box")
+
 # Character
 # export var
 export (bool) var DEBUG_MODE    = false
@@ -76,7 +80,7 @@ func _process(delta):
 	
 	# death
 	if cur_health <= 0:
-		queue_free()
+		die()
 	pass
 
 # FIXED PROCESS
@@ -129,4 +133,17 @@ func play_loop_anim(name):
 func idle():
 	move(get_pos(), 0)
 	play_loop_anim("idle")
+	pass
+
+func die():
+	set_process(false)
+	set_fixed_process(false)
+	hurtbox.queue_free()
+	physics_box.queue_free()
+	randomize()
+	set_linear_velocity(Vector2(-200*direction, -100*floor(rand_range(4,10))))
+	anim.play("die")
+	yield(anim, "finished")
+	print("die")
+	queue_free()
 	pass

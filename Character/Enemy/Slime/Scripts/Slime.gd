@@ -15,7 +15,6 @@ const STATE = {
 
 # READY
 func _ready():
-	set_fixed_process(true)
 	WanderBehavior  = WanderBehavior.new(self)
 	PursuitBehavior = PursuitBehavior.new(self)
 	state_machine.push_state(STATE.WANDER)
