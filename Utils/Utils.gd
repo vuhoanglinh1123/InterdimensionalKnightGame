@@ -1,15 +1,15 @@
-# game.gd
-
 extends Node
+
 ##PRELOAD
 var StatusPoison = preload("res://Environment/ElementalStatus/StatusPoison.gd")
+
 #enum
 enum STATUS{
 	POISON = 1
 }
 
-var process_time = 0   # elapsed time since the start of the game
-var fixed_process_time = 0
+var elapsed_time = 0  # Time from the start of the game
+var fixed_delta = 0   # Physics engine ticks
 
 func _ready():
 	set_process(true)
@@ -17,11 +17,11 @@ func _ready():
 	pass
 
 func _process(delta):
-	process_time += delta
+	elapsed_time += delta
 	pass
 
 func _fixed_process(delta):
-	fixed_process_time += delta
+	fixed_delta = delta
 	pass
 
 ##COMMON FUNCTIONS

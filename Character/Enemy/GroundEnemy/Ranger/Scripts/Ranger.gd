@@ -1,9 +1,9 @@
-extends "res://Character/Enemy/Enemy.gd"
+extends "res://Character/Enemy/GroundEnemy/GroundEnemy.gd"
 
 # preload classes
-var WanderBehavior  = preload("res://Character/Enemy/AI Scripts/Behaviors/WanderBehavior.gd")
-var PursuitBehavior = preload("res://Character/Enemy/AI Scripts/Behaviors/PursuitBehavior.gd")
-
+var WanderBehavior  = preload("res://Character/Enemy/GroundEnemy/AIBehaviors/WanderBehavior.gd")
+var PursuitBehavior = preload("res://Character/Enemy/GroundEnemy/AIBehaviors/PursuitBehavior.gd")
+var ArrowScene      = load("res://Character/Enemy/GroundEnemy/Ranger/arrow.tscn")
 
 # STATES
 const STATE = { 
@@ -39,13 +39,6 @@ func take_damage(damage, direction, push_back_force):
 	run_anim()
 	pass
 
-# Deal damage to PLAYER on contact
-func _on_hurtbox_area_enter( area ):
-	if area.is_in_group("PLAYER"):
-		var damage_dir = sign(target.get_pos().x - get_pos().x)
-		target.take_damage(CONTACT_DMG, damage_dir, KNOCKBACK_FORCE)
-	pass # replace with function body
-
 ## Animation handling
 func run_anim():
 	current_state = state_machine.get_current_state()
@@ -62,7 +55,6 @@ func run_anim():
 		anim.play("hurt")
 	
 	pass
-
 
 # WANDER STATE ------------------------------------------------------------------------
 # WANDERING and IDLING
@@ -95,23 +87,32 @@ func pursuit():
 	
 	## EXIT
 	# PURSUIT -> ATTACK
-	if att_dt.is_colliding() and ground_check():
+	if attack_dt.is_colliding() and ground_check():
 		PursuitBehavior.exit()
 		state_machine.push_state(STATE.ATTACK)
 	
 	pass
 
-
+var n = 0
+var arrow
 # ATTACK STATE -------------------------------------------------------------------------
 # ATTACK the PLAYER
 func attack():
+	run_anim()
+	
+	if n < 1:
+		arrow = ArrowScene.instance()
+		arrow.set_pos(get_global_pos())
+		get_tree().get_root().add_child(arrow)
+		n += 1
+	
+	direction = sign(target.get_pos().x - get_pos().x)
 	
 	## EXIT
 	# ATTACK -> previous STATE
-	if not att_dt.is_colliding() or not ground_check():
+	if is_target_out_of_range(ATTACK_RANGE*1.5, OS.get_window_size().y) or not ground_check():
 		state_machine.pop_state()
 	pass
-
 
 # HIT STATE -----------------------------------------------------------------------------
 # When SELF is take_damage
@@ -120,5 +121,4 @@ func hurt():
 		state_machine.pop_state()
 		state_machine.push_state(STATE.PURSUIT)
 	pass
-
 

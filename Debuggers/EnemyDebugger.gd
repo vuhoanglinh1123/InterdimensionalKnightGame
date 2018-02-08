@@ -38,7 +38,7 @@ func _process(delta):
 	
 	linear_velocity_label.set_text(velocity_label_begin + str(target.get_linear_velocity()) )
 	
-	health_label.set_text(health_label_begin + str(target.cur_health) )
+	health_label.set_text(health_label_begin + str(target.current_health) )
 	
 	anim_label.set_text(anim_label_begin + str(target.anim.get_current_animation()))
 	pass

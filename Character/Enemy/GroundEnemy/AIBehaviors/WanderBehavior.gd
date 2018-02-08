@@ -1,6 +1,3 @@
-extends Node2D
-
-
 # private var
 var body
 var can_walk

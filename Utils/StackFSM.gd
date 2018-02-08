@@ -1,5 +1,3 @@
-extends Node
-
 var body
 var stack = Array()
 

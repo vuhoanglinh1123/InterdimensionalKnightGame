@@ -1,9 +1,3 @@
-extends Node2D
-
-# Required variables:
-# PURSUIT_RANGE
-# PURSUIT_VELOCITY
-
 var body
 var body_position
 var target_position
