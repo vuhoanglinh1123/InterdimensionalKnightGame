@@ -3,7 +3,9 @@ extends "res://Character/Enemy/GroundEnemy/GroundEnemy.gd"
 # preload classes
 var WanderBehavior  = preload("res://Character/Enemy/GroundEnemy/AIBehaviors/WanderBehavior.gd")
 var PursuitBehavior = preload("res://Character/Enemy/GroundEnemy/AIBehaviors/PursuitBehavior.gd")
-var ArrowScene      = load("res://Character/Enemy/GroundEnemy/Ranger/arrow.tscn")
+var ArrowScene      = preload("res://Character/Enemy/GroundEnemy/Ranger/arrow.tscn")
+
+export var PROJECTILE_SPEED = 600
 
 # STATES
 const STATE = { 
@@ -53,6 +55,9 @@ func run_anim():
 	elif current_state == STATE.HURT:
 		anim.stop()
 		anim.play("hurt")
+	elif current_state == STATE.ATTACK:
+		anim.stop()
+		anim.play(STATE.ATTACK)
 	
 	pass
 
@@ -93,32 +98,45 @@ func pursuit():
 	
 	pass
 
-var n = 0
-var arrow
-# ATTACK STATE -------------------------------------------------------------------------
-# ATTACK the PLAYER
-func attack():
-	run_anim()
-	
-	if n < 1:
-		arrow = ArrowScene.instance()
-		arrow.set_pos(get_global_pos())
-		get_tree().get_root().add_child(arrow)
-		n += 1
-	
-	direction = sign(target.get_pos().x - get_pos().x)
-	
-	## EXIT
-	# ATTACK -> previous STATE
-	if is_target_out_of_range(ATTACK_RANGE*1.5, OS.get_window_size().y) or not ground_check():
-		state_machine.pop_state()
-	pass
 
 # HIT STATE -----------------------------------------------------------------------------
 # When SELF is take_damage
 func hurt():
+	## EXIT
+	# HURT -> PURSUIT
 	if ground_check() and not anim.is_playing():
+		time = ATTACK_INTERVAL + att_time
 		state_machine.pop_state()
 		state_machine.push_state(STATE.PURSUIT)
+	pass
+
+
+# ATTACK STATE -------------------------------------------------------------------------
+# ATTACK the PLAYER
+func attack():
+	time = time + Utils.fixed_delta
+	
+	# Start Attack condition
+	if time >= ATTACK_INTERVAL + att_time:
+		run_anim()
+		time = 0
+	elif time > att_time:
+		idle()
+		direction = sign(target.get_pos().x - get_pos().x)
+	
+	## EXIT
+	# ATTACK -> previous STATE
+	if is_target_out_of_range(ATTACK_RANGE*1.5, OS.get_window_size().y) or not ground_check():
+		time = ATTACK_INTERVAL + att_time
+		state_machine.pop_state()
+	pass
+
+func fire():
+	var arrow = ArrowScene.instance()
+	arrow.set_pos(get_global_pos() + Vector2(100,0)*direction)
+	arrow.direction = direction
+	arrow.projectile_range = PURSUIT_RANGE
+	arrow.projectile_speed = PROJECTILE_SPEED
+	get_parent().add_child(arrow)
 	pass
 

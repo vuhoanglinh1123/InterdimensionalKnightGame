@@ -10,11 +10,10 @@ func _init(body):
 
 func update():
 	var cur_state = get_current_state()
-	if cur_state != null:
-		if cur_state != prev_state:
-			update_func = funcref(body, cur_state)
-			prev_state = cur_state
-		update_func.call_func()
+	if cur_state != null and cur_state != prev_state:
+		update_func = funcref(body, cur_state)
+		prev_state = cur_state
+	update_func.call_func()
 	pass
 
 func pop_state():

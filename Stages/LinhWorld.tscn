@@ -4,8 +4,8 @@
 [ext_resource path="res://Environment/Static/ground.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Environment/Static/wall.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Environment/Static/platform.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Character/Enemy/GroundEnemy/Slime/slime.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Character/Enemy/GroundEnemy/Ranger/ranger.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Character/Enemy/GroundEnemy/Ranger/ranger.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Character/Enemy/GroundEnemy/Slime/slime.tscn" type="PackedScene" id=6]
 
 [node name="world" type="Node"]
 
@@ -63,17 +63,13 @@ transform/pos = Vector2( 2417.72, -412.064 )
 
 [node name="enemies" type="Node" parent="."]
 
-[node name="slime" parent="enemies" instance=ExtResource( 5 )]
+[node name="ranger" parent="enemies" instance=ExtResource( 5 )]
 
-transform/pos = Vector2( 938.021, 399.293 )
-START_POSITION = Vector2( 950, 400 )
-JUMPABLE = false
-PURSUIT_VELOCITY = 300
-TRACE_AMOUNT = 10
-
-[node name="ranger" parent="enemies" instance=ExtResource( 6 )]
-
-transform/pos = Vector2( 2795.05, 367.603 )
+transform/pos = Vector2( 2123.61, 166.762 )
 START_POSITION = Vector2( 2800, 350 )
+
+[node name="slime" parent="enemies" instance=ExtResource( 6 )]
+
+transform/pos = Vector2( 1346.85, -1.42041 )
 
 

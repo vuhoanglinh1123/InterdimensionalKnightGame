@@ -6,10 +6,6 @@ onready var hitbox = flip.get_node("attack/hitbox")
 var WanderBehavior  = preload("res://Character/Enemy/GroundEnemy/AIBehaviors/WanderBehavior.gd")
 var PursuitBehavior = preload("res://Character/Enemy/GroundEnemy/AIBehaviors/PursuitBehavior.gd")
 
-var user = self
-var time = ATTACK_INTERVAL
-var obj_attack
-
 # STATES
 const STATE = { 
 	WANDER = "wander",
@@ -23,6 +19,7 @@ func _ready():
 	WanderBehavior  = WanderBehavior.new(self)
 	PursuitBehavior = PursuitBehavior.new(self)
 	state_machine.push_state(STATE.WANDER)
+	hitbox.set_enable_monitoring(false)
 	pass
 
 func _draw():
@@ -51,6 +48,13 @@ func _on_hurtbox_area_enter( area ):
 		target.take_damage(CONTACT_DMG, damage_dir, KNOCKBACK_FORCE)
 	pass # replace with function body
 
+# Deal damage to PLAYER while attacking
+func _on_hitbox_area_enter( area ):
+	if area.is_in_group("PLAYER"):
+		var damage_dir = direction
+		target.take_damage(ATTACK_DMG, damage_dir, KNOCKBACK_FORCE)
+	pass # replace with function body
+
 ## Animation handling
 func run_anim():
 	current_state = state_machine.get_current_state()
@@ -62,12 +66,12 @@ func run_anim():
 			idle()
 	elif current_state == STATE.PURSUIT:
 		play_loop_anim(STATE.PURSUIT)
-	elif current_state == STATE.ATTACK:
-		anim.stop()
-		anim.play(STATE.ATTACK)
 	elif current_state == STATE.HURT:
 		anim.stop()
 		anim.play(STATE.HURT)
+	elif current_state == STATE.ATTACK:
+		anim.stop()
+		anim.play(STATE.ATTACK)
 	
 	pass
 
@@ -109,47 +113,61 @@ func pursuit():
 	
 	pass
 
+# HIT STATE -----------------------------------------------------------------------------
+# When SELF is take_damage
+func hurt():
+	hitbox.set_enable_monitoring(false)
+	
+	## EXIT
+	# HURT -> PURSUIT
+	if ground_check() and not anim.is_playing():
+		time = ATTACK_INTERVAL + att_time
+		state_machine.pop_state()
+		state_machine.push_state(STATE.PURSUIT)
+	pass
 
 # ATTACK STATE -------------------------------------------------------------------------
 # ATTACK the PLAYER
 func attack():
 	time += Utils.fixed_delta
 	
-	if time >= ATTACK_INTERVAL:
+	# Start Attack condition
+	if time >= ATTACK_INTERVAL + att_time:
 		obj_attack = Attack.new(self)
-		switch_attack_func()
-		obj_attack.update()
 		time = 0
 	
-	## EXIT
-	# ATTACK -> previous STATE
-	if not attack_dt.is_colliding() or not ground_check():
-		time = ATTACK_INTERVAL
-		state_machine.pop_state()
+	# Running Attack condition
+	if time < att_time:
+		obj_attack.update()
+	else:
+		idle()
+		
+		## EXIT
+		# ATTACK -> previous STATE
+		if not attack_dt.is_colliding() or not ground_check():
+			hitbox.set_enable_monitoring(false)
+			time = ATTACK_INTERVAL + att_time
+			state_machine.pop_state()
+	
+	pass
+
+func switch_windup_func():
+	obj_attack.switch_windup_func()
 	pass
 
 func switch_attack_func():
 	obj_attack.switch_attack_func()
 	pass
 
-# HIT STATE -----------------------------------------------------------------------------
-# When SELF is take_damage
-func hurt():
-	if ground_check() and not anim.is_playing():
-		state_machine.pop_state()
-		state_machine.push_state(STATE.PURSUIT)
+func switch_callback_func():
+	obj_attack.switch_callback_func()
 	pass
 
 # Inner class that handles attack
 class Attack extends "res://Utils/AttackState.gd":
 	
 	func _init(weapon).(weapon):
-		print("attack")
 		ANIM_PLAYER = weapon.anim
 		HITBOX = weapon.hitbox
-		pass
-	
-	func attack_func():
 		USER.run_anim()
 		pass
-	

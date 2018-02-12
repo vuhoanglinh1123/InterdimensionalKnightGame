@@ -7,7 +7,6 @@ onready var bound_dt_2   = get_node("bound_detector_2")
 onready var wall_dt      = flip.get_node("wall_detector")
 onready var player_dt    = flip.get_node("player_detector")
 onready var attack_dt    = flip.get_node("attack/att_detector")
-onready var wander_timer = get_node("wander_timer")
 
 # Character
 # export var
@@ -36,7 +35,7 @@ func _ready():
 # define how SELF moves
 func move(target, max_velocity):
 	var position = get_pos()
-	var velocity = Vector2(target - get_pos()).normalized() * max_velocity
+	var velocity = Vector2(target - position).normalized() * max_velocity
 	set_linear_velocity(Vector2(velocity.x, get_linear_velocity().y).floor())
 	pass
 

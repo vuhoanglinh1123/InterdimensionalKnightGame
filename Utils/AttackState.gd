@@ -36,15 +36,18 @@ func windup_func():
 #attack func
 func switch_attack_func():
 	update_func = funcref(self, "attack_func")
-	HITBOX.set_enable_monitoring(true)
+	if HITBOX != null:
+		HITBOX.set_enable_monitoring(true)
 	pass
+	
 func attack_func():
 	
 	pass
 #callback func
 func switch_callback_func():
 	update_func = funcref(self, "callback_func")
-	HITBOX.set_enable_monitoring(false)
+	if HITBOX != null:
+		HITBOX.set_enable_monitoring(false)
 	pass
 func callback_func():
 	

@@ -1,9 +1,11 @@
 # private var
 var body
-var can_walk
+var is_moving
 var target    # fake target to follow
 var target_dir
-var is_moving = false
+var time
+var walk_time
+var idle_time
 
 func _init(body):
 	self.body = body
@@ -11,21 +13,16 @@ func _init(body):
 	pass
 
 func init_variable():
-	can_walk  = true
 	target_dir = body.direction
 	set_target()
-	body.wander_timer.connect("timeout", self, "on_timer_timeout")
-	body.wander_timer.set_wait_time(0.1)
-	body.wander_timer.set_one_shot(true)
-	body.wander_timer.start()
+	time = 0
+	walk_time = 0
+	idle_time = 0
 	pass
 
 ## BEHAVIOR SCRIPT
 # PATROLING
 func wander():
-	body.wander_timer.set_active(true)
-	body.direction = target_dir
-	
 	if body.ground_check():
 		# Check for platform edges
 		if body.direction > 0 and not body.bound_dt_1.is_colliding():
@@ -39,30 +36,31 @@ func wander():
 			if sign(normal.x * body.direction) < 0:
 				target_dir = -body.direction
 	
+	random_steps()
 	set_target()
-	if can_walk:
-		body.move(target, body.MAX_VELOCITY)
-		is_moving = true
-	else:
-		is_moving = false
+	body.direction = target_dir
 	pass
 
-func on_timer_timeout():
-	randomize()
-	if can_walk:
-		var idle_time = rand_range(body.IDLE_TIME.x, body.IDLE_TIME.y)
-		body.wander_timer.set_wait_time(idle_time)
-		can_walk = false
-	else:
-		var walk_time = rand_range(body.WALK_TIME.x, body.WALK_TIME.y)
-		body.wander_timer.set_wait_time(walk_time)
-		# randomize the direction between -1 and 1
+func random_steps():
+	time = time + Utils.fixed_delta
+	
+	if time >= walk_time + idle_time:
+		randomize()
+		walk_time = rand_range(body.WALK_TIME.x, body.WALK_TIME.y)
+		idle_time = rand_range(body.IDLE_TIME.x, body.IDLE_TIME.y)
+		
 		if round(randf()):
 			target_dir = 1
 		else:
 			target_dir = -1
-		can_walk = true
-	body.wander_timer.start()
+		
+		time = 0
+	elif time < walk_time:
+		body.move(target, body.MAX_VELOCITY)
+		is_moving = true
+	else:
+		is_moving = false
+		
 	pass
 
 func set_target():
@@ -74,5 +72,5 @@ func is_wandering():
 	pass
 
 func exit():
-	body.wander_timer.set_active(false)
+	
 	pass

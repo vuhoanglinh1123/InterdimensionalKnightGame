@@ -13,7 +13,7 @@ onready var physics_box = get_node("physics_box")
 export (bool) var DEBUG_MODE    = false
 export (Vector2) var START_POSITION = Vector2(0, 0)
 export (int) var MAX_HEALTH     = 10
-export (int) var ATK_DMG        = 0
+export (int) var ATTACK_DMG     = 0
 export (int) var CONTACT_DMG    = 0
 export (int) var EXTRA_GRAVITY  = 2500
 export (Vector2) var KNOCKBACK_FORCE = Vector2(0, 0)
@@ -31,12 +31,21 @@ var direction  = 1
 var current_state = ""
 var status = ""
 
+# private var
+var user = self
+var time
+var att_time
+var obj_attack
+
 func _ready():
 	set_process(true)
 	set_fixed_process(true)
 	
 	set_applied_force(Vector2(0, EXTRA_GRAVITY))
 	current_health = MAX_HEALTH
+	
+	att_time = anim.get_animation("attack").get_length() / anim.get_speed()
+	time = ATTACK_INTERVAL + att_time
 	pass
 
 # PROCESS
