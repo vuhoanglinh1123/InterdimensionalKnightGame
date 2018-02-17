@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=1]
+
+[ext_resource path="res://Environment/Static/ground.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Character/Player/player.tscn" type="PackedScene" id=2]
+
+[node name="BaoWorld" type="Node"]
+
+[node name="ground" parent="." instance=ExtResource( 1 )]
+
+transform/pos = Vector2( 515, 500 )
+
+[node name="ground1" parent="." instance=ExtResource( 1 )]
+
+transform/pos = Vector2( 1535, 500 )
+
+[node name="player" parent="." instance=ExtResource( 2 )]
+
+transform/pos = Vector2( 631.64, 349.899 )
+
+

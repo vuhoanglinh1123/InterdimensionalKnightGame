@@ -7,8 +7,7 @@ var input_states = preload("res://Utils/InputStates.gd")
 const STATE = {
 	GROUND = "state_ground",
 	AIR = "state_air",
-	ATK1 = "state_atk1",
-	ATK2 = "state_atk2",
+	ATKING = "state_attacking",
 	HURT = "state_hurt"
 }
 
@@ -21,8 +20,10 @@ var btn_atk1 = input_states.new("btn_atk1")
 var btn_atk2 = input_states.new("btn_atk2")
 
 #weapon
-onready var weapon = flip.get_node("hitboxes")
+onready var weapon = flip.get_node("DefaultSword")
 
+#air atk already or not
+var is_air_atk = false
 
 func _ready():
 	state_machine.push_state(STATE.AIR)
@@ -71,36 +72,51 @@ func state_ground():
 	if btn_up.check() == 1:
 		jump(jump_force)
 	elif btn_atk1.check() == 1:
-		state_machine.push_state(STATE.ATK1)
-		weapon.atk1()
+		state_machine.push_state(STATE.ATKING)
+		weapon.state_atk1_init()
+	elif btn_atk2.check() == 1:
+		state_machine.push_state(STATE.ATKING)
+		weapon.state_atk2_init()
 
-	
 	#check state
 	if !ground_check():
 		state_machine.pop_state()
 		state_machine.push_state(STATE.AIR)
+		is_air_atk = true
 	pass
-	
+
 #air
 func state_air():
 	#inputs
+	#movement
 	if btn_left.check() == 2:
 		direction = -1
-		move( direction * max_run_speed, accerleration)
+		move( direction * max_run_speed/2, accerleration)
 	elif btn_right.check() == 2:
 		direction = 1
-		move( direction * max_run_speed, accerleration)
+		move( direction * max_run_speed/2, accerleration)
 	else:
 		move(0, accerleration)
+	#atk1
+	if btn_atk1.check() == 1 && is_air_atk:
+		state_machine.push_state(STATE.ATKING)
+		weapon.state_atk1_air_init()
+		is_air_atk = false
+		pass
+	elif btn_atk2.check() == 1 && is_air_atk:
+		state_machine.push_state(STATE.ATKING)
+		weapon.state_atk2_air_init()
+		is_air_atk = false
+		pass
 	#state
 	if ground_check():
 		state_machine.pop_state()
 		state_machine.push_state(STATE.GROUND)
 	pass
 
-#atk1
-func state_atk1():
-	weapon.state_atk1()
+#state attacking
+func state_attacking():
+	weapon.update()
 	pass
 
 #state hurt
