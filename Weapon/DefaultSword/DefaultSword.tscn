@@ -17,12 +17,12 @@ extents = Vector2( 55, 64 )
 custom_solver_bias = 0.0
 extents = Vector2( 61, 80 )
 
-[sub_resource type="RectangleShape2D" id=5]
+[sub_resource type="RectangleShape2D" id=4]
 
 custom_solver_bias = 0.0
 extents = Vector2( 74, 18 )
 
-[sub_resource type="CircleShape2D" id=4]
+[sub_resource type="CircleShape2D" id=5]
 
 custom_solver_bias = 0.0
 radius = 97.0
@@ -348,7 +348,7 @@ tracks/6/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=14]
+[sub_resource type="Animation" id=11]
 
 resource/name = "atk2_air_downward_thrust"
 length = 0.01
@@ -415,7 +415,7 @@ tracks/5/keys = {
 "values": [ 1.0 ]
 }
 
-[sub_resource type="Animation" id=15]
+[sub_resource type="Animation" id=12]
 
 resource/name = "atk2_air_downward_thrust_callback"
 length = 0.05
@@ -482,9 +482,8 @@ tracks/5/keys = {
 "values": [ 1.0, 0.0 ]
 }
 
-[sub_resource type="Animation" id=11]
+[sub_resource type="Animation" id=13]
 
-resource/name = "atk2_thrust"
 length = 0.2
 loop = false
 step = 0.01
@@ -561,9 +560,8 @@ tracks/6/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=12]
+[sub_resource type="Animation" id=14]
 
-resource/name = "atk2_thrust_callback"
 length = 0.15
 loop = false
 step = 0.01
@@ -637,9 +635,8 @@ tracks/6/keys = {
 "values": [  ]
 }
 
-[sub_resource type="Animation" id=13]
+[sub_resource type="Animation" id=15]
 
-resource/name = "init"
 length = 0.01
 loop = false
 step = 0.01
@@ -775,7 +772,7 @@ _update_shape_index = 0
 editor/display_folded = true
 transform/pos = Vector2( 150, 0 )
 input/pickable = true
-shapes/0/shape = SubResource( 5 )
+shapes/0/shape = SubResource( 4 )
 shapes/0/transform = Matrix32( 1, 0, 0, 1, -11.0031, -0.440128 )
 shapes/0/trigger = false
 gravity_vec = Vector2( 0, 1 )
@@ -786,7 +783,7 @@ angular_damp = 1.0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="hitboxes/atk2_thrust"]
 
 transform/pos = Vector2( -11.0031, -0.440128 )
-shape = SubResource( 5 )
+shape = SubResource( 4 )
 trigger = false
 _update_shape_index = 0
 
@@ -794,7 +791,7 @@ _update_shape_index = 0
 
 editor/display_folded = true
 input/pickable = true
-shapes/0/shape = SubResource( 4 )
+shapes/0/shape = SubResource( 5 )
 shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
 shapes/0/trigger = false
 gravity_vec = Vector2( 0, 1 )
@@ -804,7 +801,7 @@ angular_damp = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="hitboxes/atk1_air_spin"]
 
-shape = SubResource( 4 )
+shape = SubResource( 5 )
 trigger = false
 _update_shape_index = 0
 
@@ -857,7 +854,7 @@ color = Color( 1, 0, 0, 0.490196 )
 
 [node name="atk1_combo2" type="ColorFrame" parent="testVisual"]
 
-visibility/opacity = 0.0
+visibility/opacity = 1.19209e-07
 focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
@@ -933,11 +930,11 @@ anims/atk1airspin = SubResource( 7 )
 anims/atk1combo1 = SubResource( 8 )
 anims/atk1combo2 = SubResource( 9 )
 anims/atk1combo3 = SubResource( 10 )
-anims/atk2_air_downward_thrust = SubResource( 14 )
-anims/atk2_air_downward_thrust_callback = SubResource( 15 )
-anims/atk2_thrust = SubResource( 11 )
-anims/atk2_thrust_callback = SubResource( 12 )
-anims/init = SubResource( 13 )
+anims/atk2_air_downward_thrust = SubResource( 11 )
+anims/atk2_air_downward_thrust_callback = SubResource( 12 )
+anims/atk2_thrust = SubResource( 13 )
+anims/atk2_thrust_callback = SubResource( 14 )
+anims/init = SubResource( 15 )
 playback/active = true
 playback/speed = 1.0
 blend_times = [  ]

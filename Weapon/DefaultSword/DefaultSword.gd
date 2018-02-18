@@ -51,7 +51,6 @@ class StateAtk1Combo1 extends "res://Utils/AttackState.gd":
 		HITBOX = WEAPON.atk1_combo1
 		ANIM_PLAYER = WEAPON.anim
 		ANIM_NAME = "atk1combo1"
-		ANIM_PLAYER.play("init")
 		ANIM_PLAYER.play(ANIM_NAME)
 		USER.move(0, USER.accerleration)
 		switch_attack_func()
@@ -59,6 +58,7 @@ class StateAtk1Combo1 extends "res://Utils/AttackState.gd":
 	func attack_func():
 		if WEAPON.user.btn_atk1.check() == 1:
 			WEAPON.cur_atk_state = WEAPON.StateAtk1Combo2.new(WEAPON)
+			HITBOX.call_deferred("set_enable_monitoring", false)
 
 		pass
 	func callback_func():
@@ -73,12 +73,12 @@ class StateAtk1Combo2 extends "res://Utils/AttackState.gd":
 		HITBOX = weapon.atk1_combo2
 		ANIM_PLAYER = weapon.anim
 		ANIM_NAME = "atk1combo2"
-		ANIM_PLAYER.play("init")
 		ANIM_PLAYER.play(ANIM_NAME)
 		switch_attack_func()
 		pass
 	func attack_func():
 		if WEAPON.user.btn_atk1.check() == 1:
+			HITBOX.call_deferred("set_enable_monitoring", false)
 			WEAPON.cur_atk_state = WEAPON.StateAtk1Combo3.new(WEAPON)
 		pass
 	func callback_func():
@@ -161,6 +161,7 @@ class StateAtk2AirThrustDownward extends "res://Utils/AttackState.gd":
 		WEAPON.air_move(USER)
 		if USER.btn_atk1.check() == 1:
 			WEAPON.cur_atk_state = WEAPON.StateAtk1AirSpin.new(WEAPON)
+			HITBOX.call_deferred("set_enable_monitoring", false)
 		pass
 		
 	func switch_callback_func():
@@ -177,31 +178,31 @@ class StateAtk2AirThrustDownward extends "res://Utils/AttackState.gd":
 		pass
 ##HITBOXES
 func _on_atk1_combo1_area_enter( area ):
-	if area.is_in_group("enermy_hurtbox"):
+	if area.is_in_group("ENEMY"):
 		direction = flip.get_scale().x
 		area.get_parent().take_damage(damage, direction,push_back_force*0.5)
 	pass
 
 func _on_atk1_combo2_area_enter( area ):
-	if area.is_in_group("enermy_hurtbox"):
+	if area.is_in_group("ENEMY"):
 		direction = flip.get_scale().x
 		area.get_parent().take_damage(damage, direction, push_back_force)
 	pass
 
 func _on_atk1_combo3_area_enter( area ):
-	if area.is_in_group("enermy_hurtbox"):
+	if area.is_in_group("ENEMY"):
 		direction = flip.get_scale().x
 		area.get_parent().take_damage(damage*2, direction, push_back_force*1.5)
 	pass # replace with function body
 
 func _on_atk1_air_spin_area_enter( area ):
-	if area.is_in_group("enermy_hurtbox"):
+	if area.is_in_group("ENEMY"):
 		direction = flip.get_scale().x
 		area.get_parent().take_damage(damage, direction, push_back_force)
 	pass # replace with function body
 	
 func _on_atk2_thrust_area_enter( area ):
-	if area.is_in_group("enermy_hurtbox"):
+	if area.is_in_group("ENEMY"):
 		direction = flip.get_scale().x
 		var push_back_force_edit = Vector2(push_back_force.x*3, push_back_force.y)
 		area.get_parent().take_damage(damage, direction,push_back_force_edit)
@@ -210,7 +211,7 @@ func _on_atk2_thrust_area_enter( area ):
 	pass # replace with function body
 
 func _on_atk2_air_downward_thrust_area_enter( area ):
-	if area.is_in_group("enermy_hurtbox"):
+	if area.is_in_group("ENEMY"):
 		direction = flip.get_scale().x
 		var push_back_force_edit = Vector2(0, 0)
 		area.get_parent().take_damage(damage, direction,push_back_force_edit)

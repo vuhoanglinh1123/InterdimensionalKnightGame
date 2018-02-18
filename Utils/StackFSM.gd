@@ -1,27 +1,19 @@
-extends Node
-
 var body
-var stack
+var stack = Array()
 
 var update_func
 var prev_state = ""
 
 func _init(body):
 	self.body = body
-	init_variable()
-	pass
-
-func init_variable():
-	stack = Array()
 	pass
 
 func update():
 	var cur_state = get_current_state()
-	if cur_state != null:
-		if cur_state != prev_state:
-			update_func = funcref(body, cur_state)
-			prev_state = cur_state
-		update_func.call_func()
+	if cur_state != null and cur_state != prev_state:
+		update_func = funcref(body, cur_state)
+		prev_state = cur_state
+	update_func.call_func()
 	pass
 
 func pop_state():
@@ -34,8 +26,8 @@ func push_state(state):
 	pass
 
 func get_current_state():
-	if not stack.empty():
-		return stack.back()
-	else:
+	if stack.empty():
 		return null
+	else:
+		return stack.back()
 	pass

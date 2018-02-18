@@ -94,6 +94,7 @@ drag_margin/right = 0.2
 drag_margin/bottom = 0.2
 
 [node name="hurtbox" type="Area2D" parent="." groups=[
+"PLAYER",
 "player_hurtbox",
 ]]
 

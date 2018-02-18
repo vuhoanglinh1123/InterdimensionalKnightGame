@@ -15,7 +15,6 @@ const STATE = {
 var btn_left = input_states.new("btn_left")
 var btn_right = input_states.new("btn_right")
 var btn_up = input_states.new("btn_up")
-var btn_down = input_states.new("btn_down")
 var btn_atk1 = input_states.new("btn_atk1")
 var btn_atk2 = input_states.new("btn_atk2")
 
@@ -33,7 +32,7 @@ func update_state():
 	state_machine.update()
 	pass
 
-##ovrride damaged
+##ovrride take_damage
 func take_damage(damage, direction, push_back_force):
 	.take_damage(damage, direction, push_back_force)
 	state_machine.pop_state()
