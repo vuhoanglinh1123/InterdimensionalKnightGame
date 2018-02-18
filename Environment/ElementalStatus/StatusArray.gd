@@ -5,7 +5,8 @@ var list = Array()
 #check if we can combine the new status into any existing status
 func add(status):
 	var done = false
-	for i in range(list.size()):
+	var size = list.size()
+	for i in range(size):
 		done = list[i].combine(status)
 		if done:
 			return
@@ -18,9 +19,10 @@ func add(status):
 func update(delta):
 	var iter = list.size() - 1
 	while(iter >= 0):
-		if list[iter].duration <= 0:
-			remove(list[iter], iter)
 		list[iter].update(delta)
+		if list[iter].duration <= 0:
+			call_deferred("remove", list[iter], iter)
+#			remove(list[iter], iter)
 		iter -= 1
 	pass
 

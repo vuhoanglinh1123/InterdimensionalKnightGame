@@ -32,7 +32,6 @@ func update(delta):
 	if timer >= tick_time:
 		tick_effect.call_func()
 		timer = 0
-		
 	pass
 
 #effect happen when the status is added into array or combined 

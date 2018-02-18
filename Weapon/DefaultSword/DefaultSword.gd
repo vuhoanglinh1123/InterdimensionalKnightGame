@@ -57,8 +57,9 @@ class StateAtk1Combo1 extends "res://Utils/AttackState.gd":
 		pass
 	func attack_func():
 		if WEAPON.user.btn_atk1.check() == 1:
-			WEAPON.cur_atk_state = WEAPON.StateAtk1Combo2.new(WEAPON)
+			ANIM_PLAYER.stop()
 			HITBOX.call_deferred("set_enable_monitoring", false)
+			WEAPON.cur_atk_state = WEAPON.StateAtk1Combo2.new(WEAPON)
 
 		pass
 	func callback_func():
@@ -78,6 +79,7 @@ class StateAtk1Combo2 extends "res://Utils/AttackState.gd":
 		pass
 	func attack_func():
 		if WEAPON.user.btn_atk1.check() == 1:
+			ANIM_PLAYER.stop()
 			HITBOX.call_deferred("set_enable_monitoring", false)
 			WEAPON.cur_atk_state = WEAPON.StateAtk1Combo3.new(WEAPON)
 		pass
@@ -160,8 +162,9 @@ class StateAtk2AirThrustDownward extends "res://Utils/AttackState.gd":
 	func attack_func():
 		WEAPON.air_move(USER)
 		if USER.btn_atk1.check() == 1:
-			WEAPON.cur_atk_state = WEAPON.StateAtk1AirSpin.new(WEAPON)
+			ANIM_PLAYER.stop()
 			HITBOX.call_deferred("set_enable_monitoring", false)
+			WEAPON.cur_atk_state = WEAPON.StateAtk1AirSpin.new(WEAPON)
 		pass
 		
 	func switch_callback_func():

@@ -90,10 +90,10 @@ func state_air():
 	#movement
 	if btn_left.check() == 2:
 		direction = -1
-		move( direction * max_run_speed/2, accerleration)
+		move( direction * max_run_speed, accerleration/10)
 	elif btn_right.check() == 2:
 		direction = 1
-		move( direction * max_run_speed/2, accerleration)
+		move( direction * max_run_speed, accerleration/10)
 	else:
 		move(0, accerleration)
 	#atk1

@@ -47,7 +47,6 @@ func attack_func():
 func switch_callback_func():
 	update_func = funcref(self, "callback_func")
 	#make sure set_enable_monitoring(false) work during body_enter()
-	print(HITBOX)
 	if HITBOX != null:
 		HITBOX.call_deferred("set_enable_monitoring", false)
 	pass

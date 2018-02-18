@@ -52,10 +52,10 @@ func switch_atk_state_callback():
 func air_move(user):
 	if user.btn_left.check() == 2:
 		user.direction = -1
-		user.move( user.direction * user.max_run_speed/2, user.accerleration)
+		user.move( user.direction * user.max_run_speed, user.accerleration/10)
 	elif user.btn_right.check() == 2:
 		user.direction = 1
-		user.move( user.direction * user.max_run_speed/2, user.accerleration)
+		user.move( user.direction * user.max_run_speed, user.accerleration/10)
 	else:
 		user.move(0, user.accerleration)
 	pass
