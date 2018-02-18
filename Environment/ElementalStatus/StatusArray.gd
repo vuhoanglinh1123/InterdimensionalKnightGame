@@ -3,11 +3,11 @@ var list = Array()
 
 #add a status in to the array
 #check if we can combine the new status into any existing status
-func add(status):
+func add(status, delta):
 	var done = false
 	var size = list.size()
 	for i in range(size):
-		done = list[i].combine(status)
+		done = list[i].combine(status, delta)
 		if done:
 			return
 	#cannot combine into anything

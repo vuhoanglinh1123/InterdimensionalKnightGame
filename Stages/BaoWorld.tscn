@@ -20,11 +20,16 @@ transform/pos = Vector2( 631.64, 349.899 )
 
 [node name="SimpleElementalHazard" parent="." instance=ExtResource( 3 )]
 
-transform/pos = Vector2( 1185.92, 404.523 )
+transform/pos = Vector2( 1082.71, 404.523 )
 
 [node name="SimpleElementalHazard 2" parent="." instance=ExtResource( 3 )]
 
-transform/pos = Vector2( 1527.13, 406.429 )
-duration = 5
+transform/pos = Vector2( 1404.39, 409.218 )
+duration = 6
+
+[node name="SimpleElementalHazard 3" parent="." instance=ExtResource( 3 )]
+
+transform/pos = Vector2( 1761.45, 412.008 )
+level = 2
 
 
