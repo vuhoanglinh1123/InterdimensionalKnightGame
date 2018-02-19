@@ -73,7 +73,14 @@ func ground_check():
 	else:
 		return false
 	pass
-
+func platform_check():
+	if ground_detector.is_colliding():
+		var body = ground_detector.get_collider()
+		if body.is_in_group("PLATFORM"):
+			return body
+	else:
+		return null
+	pass
 
 ##take_damage: Can be extend depend character
 #direction: push direction in x-axis

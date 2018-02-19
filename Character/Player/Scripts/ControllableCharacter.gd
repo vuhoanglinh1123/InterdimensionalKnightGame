@@ -15,6 +15,8 @@ const STATE = {
 var btn_left = input_states.new("btn_left")
 var btn_right = input_states.new("btn_right")
 var btn_up = input_states.new("btn_up")
+var btn_down = input_states.new("btn_down")
+var btn_jump = input_states.new("btn_jump")
 var btn_atk1 = input_states.new("btn_atk1")
 var btn_atk2 = input_states.new("btn_atk2")
 
@@ -68,15 +70,23 @@ func state_ground():
 		move(0, accerleration)
 	
 	#press
-	if btn_up.check() == 1:
-		jump(jump_force)
+	if btn_jump.check() == 1:
+		#if on platform
+		var body = platform_check()
+		if body != null:
+			if btn_down.check() == 1 || btn_down.check() == 2:
+				add_collision_exception_with(body)
+			else:
+				jump(jump_force)
+		else:
+			jump(jump_force)
 	elif btn_atk1.check() == 1:
 		state_machine.push_state(STATE.ATKING)
 		weapon.state_atk1_init()
 	elif btn_atk2.check() == 1:
 		state_machine.push_state(STATE.ATKING)
 		weapon.state_atk2_init()
-
+	
 	#check state
 	if !ground_check():
 		state_machine.pop_state()
@@ -120,9 +130,13 @@ func state_attacking():
 
 #state hurt
 func state_hurt():
-	
 	if ground_check():
 		state_machine.pop_state()
 		state_machine.push_state(STATE.GROUND)
 	ground_detector.set_enabled(true)
 	pass
+#detect if leave the one way platform
+func _on_oneway_leave_body_enter( body ):
+	if body.is_in_group("PLATFORM"):
+		remove_collision_exception_with(body)
+	pass # replace with function body
