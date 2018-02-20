@@ -20,9 +20,11 @@ func pursuit():
 	body_position   = body.get_pos()
 	target_position = body.target.get_pos()
 	set_trace()
-	move_to_next_trace()
-	if body.get_linear_velocity().x != 0:
-		body.direction = sign(body.get_linear_velocity().x)
+	
+	if body.ground_check():
+		move_to_next_trace()
+		if body.get_linear_velocity().x != 0:
+			body.direction = sign(body.get_linear_velocity().x)
 	pass
 
 func set_trace():
@@ -59,7 +61,6 @@ func move_to_next_trace():
 func jump():
 	if body.ground_check():
 		body.set_axis_velocity(Vector2(0, -body.JUMP_FORCE))
-		body.anim.play("jump")
 	pass
 
 func exit():

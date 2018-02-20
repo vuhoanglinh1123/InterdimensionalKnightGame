@@ -19,6 +19,12 @@ export (Vector2) var WALK_TIME  = Vector2(1, 6)
 export (Vector2) var IDLE_TIME  = Vector2(1, 3)
 export (int) var TRACE_AMOUNT   = 10
 
+# private var
+var user = self
+var time
+var att_time
+var obj_attack
+
 func _ready():
 	ground_dt.add_exception(self)
 	wall_dt.add_exception(self)
@@ -30,6 +36,9 @@ func _ready():
 	
 	player_dt.set_cast_to(Vector2(DETECT_RANGE, 0))
 	attack_dt.set_cast_to(Vector2(ATTACK_RANGE, 0))
+	
+	att_time = anim.get_animation("attack").get_length() / anim.get_speed()
+	time = ATTACK_INTERVAL + att_time
 	pass
 
 # define how SELF moves

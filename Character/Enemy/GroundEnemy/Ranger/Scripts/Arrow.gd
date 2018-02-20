@@ -40,6 +40,7 @@ func _on_hitbox_area_enter( area ):
 
 func destroy():
 	set_process(false)
+	hitbox.queue_free()
 	anim.play("destroy")
 	yield(anim, "finished")
 	queue_free()

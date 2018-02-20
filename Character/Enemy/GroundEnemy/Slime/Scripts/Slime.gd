@@ -8,6 +8,7 @@ var PursuitBehavior = preload("res://Character/Enemy/GroundEnemy/AIBehaviors/Pur
 
 var StoredStatus = preload("res://Environment/ElementalStatus/StoredStatus.gd")
 var SimpleHazard = preload("res://Environment/ElementalHazard/SimpleElementalHazard.tscn")
+
 # STATES
 const STATE = { 
 	WANDER = "wander",
@@ -18,6 +19,7 @@ const STATE = {
 
 #Stored Status
 var stored_status
+
 # READY
 func _ready():
 	WanderBehavior  = WanderBehavior.new(self)
@@ -71,7 +73,11 @@ func run_anim():
 		else:
 			idle()
 	elif current_state == STATE.PURSUIT:
-		play_loop_anim(STATE.PURSUIT)
+		if ground_check():
+			play_loop_anim(STATE.PURSUIT)
+		else:
+			anim.stop()
+			anim.play("jump")
 	elif current_state == STATE.HURT:
 		anim.stop()
 		anim.play(STATE.HURT)
