@@ -48,7 +48,7 @@ func move_to_next_trace():
 			jump()
 		else:
 			# won't jump if BODY and TARGET is on the same ground
-			traces.pop_front()s
+			traces.pop_front()
 	elif body_position.y <= traces.front().y and abs(body_position.x - traces.front().x) <= 100:
 		traces.pop_front()
 	# Remove the trace when BODY gets close to it
