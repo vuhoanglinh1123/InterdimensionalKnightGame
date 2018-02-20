@@ -63,12 +63,15 @@ func jump(force):
 func state_ground():
 	#inputs
 	if btn_left.check() == 2:
+		play_loop_anim("run")
 		direction = -1
 		move( direction * max_run_speed, accerleration)
 	elif btn_right.check() == 2:
+		play_loop_anim("run")
 		direction = 1
 		move( direction * max_run_speed, accerleration)
 	else:
+		play_loop_anim("idle")
 		move(0, accerleration)
 	
 	#press

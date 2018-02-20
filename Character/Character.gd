@@ -18,7 +18,7 @@ var max_health = 0
 ##onready
 onready var flip = get_node("flip")
 onready var ground_detector = get_node("ground_detector")
-
+onready var anim = get_node("anim")
 ##Common var
 var direction = 1 #direction = -1:left; 1:right
 var current_speed = Vector2()
@@ -63,7 +63,11 @@ func init_variable():
 	accerleration = ACCERLERATION
 	max_health = MAX_HEALTH
 	pass
-
+# Handle looped animations
+func play_loop_anim(name):
+	if anim.get_current_animation() != name:
+		anim.play(name)
+	pass
 #ground check
 func ground_check():
 	if ground_detector.is_colliding():
