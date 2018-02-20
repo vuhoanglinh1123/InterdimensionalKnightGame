@@ -133,10 +133,6 @@ func attack():
 
 func fire():
 	var arrow = ArrowScene.instance()
-	arrow.set_pos(get_global_pos() + Vector2(100,0)*direction)
-	arrow.direction = direction
-	arrow.projectile_range = PURSUIT_RANGE
-	arrow.projectile_speed = PROJECTILE_SPEED
-	get_parent().add_child(arrow)
+	add_child(arrow)
 	pass
 

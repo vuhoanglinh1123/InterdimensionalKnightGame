@@ -5,6 +5,7 @@ onready var anim = flip.get_node("sprite/anim")
 onready var hitbox = flip.get_node("hitbox")
 onready var parent = get_parent()
 
+var pivot = 100
 var direction
 var projectile_range
 var projectile_speed
@@ -13,7 +14,11 @@ var velocity = Vector2()
 
 func _ready():
 	set_process(true)
-#	set_pos(parent.get_global_pos())
+	direction = parent.direction
+	projectile_range = parent.PURSUIT_RANGE
+	projectile_speed = parent.PROJECTILE_SPEED
+	
+	set_pos(Vector2(pivot,0) * direction)
 	flip.set_scale(Vector2(direction, 1))
 	anim.play("flying")
 	pass
@@ -29,8 +34,7 @@ func _process(delta):
 
 func _on_hitbox_area_enter( area ):
 	if area.is_in_group("PLAYER"):
-#		var damage_dir = direction
-#		target.take_damage(CONTACT_DMG, damage_dir, KNOCKBACK_FORCE)
+		parent.target.take_damage(parent.ATTACK_DMG, direction, parent.KNOCKBACK_FORCE)
 		destroy()
 	pass # replace with function body
 
