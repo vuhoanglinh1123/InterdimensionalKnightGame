@@ -2,6 +2,7 @@ extends Area2D
 
 export var level = 1
 export var duration = 3
+export var lifetime = 2
 var areas
 
 func _ready():
@@ -9,6 +10,10 @@ func _ready():
 	pass
 
 func _process(delta):
+	if lifetime <= 0:
+		queue_free()
+		return
+	lifetime -= delta
 	areas = get_overlapping_areas()
 	for area in areas:
 		if area.is_in_group("HURTBOX"):

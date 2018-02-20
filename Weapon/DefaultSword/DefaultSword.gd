@@ -11,22 +11,25 @@ onready var atk1_air_spin = hitboxes.get_node("atk1_air_spin")
 onready var atk2_thrust = hitboxes.get_node("atk2_thrust")
 onready var atk2_air_downward_thrust = hitboxes.get_node("atk2_air_downward_thrust")
 
+#spawn position of hazard
 onready var spawn_pos = atk2_air_downward_thrust.get_node("spawn_pos")
-#instance
+#hazard use to spawn
+var stored_status = null
 var SimpleHazard = preload("res://Environment/ElementalHazard/SimpleElementalHazard.tscn")
 #all the state this weapon have
 
 func _ready():
 	stop_all_hitboxes()
+#	stored_status = SimpleHazard
 	pass
 
 func stop_all_hitboxes():
-	atk1_combo1.set_enable_monitoring(false)
-	atk1_combo2.set_enable_monitoring(false)
-	atk1_combo3.set_enable_monitoring(false)
-	atk1_air_spin.set_enable_monitoring(false)
-	atk2_thrust.set_enable_monitoring(false)
-	atk2_air_downward_thrust.set_enable_monitoring(false)
+	atk1_combo1.call_deferred("set_enable_monitoring", false)
+	atk1_combo2.call_deferred("set_enable_monitoring", false)
+	atk1_combo3.call_deferred("set_enable_monitoring", false)
+	atk1_air_spin.call_deferred("set_enable_monitoring", false)
+	atk2_thrust.call_deferred("set_enable_monitoring", false)
+	atk2_air_downward_thrust.call_deferred("set_enable_monitoring", false)
 	pass
 ##ground atk
 func state_atk1_init():
@@ -171,22 +174,37 @@ class StateAtk2AirThrustDownward extends "res://Utils/AttackState.gd":
 			WEAPON.cur_atk_state = WEAPON.StateAtk1AirSpin.new(WEAPON)
 		pass
 	
-	func create_hazard():
-		
+	func create_hazard(hazard):
+		var Hazard_Ins = hazard.spawn_hazard.instance()
+		Hazard_Ins.set_global_pos(WEAPON.spawn_pos.get_global_pos())
+		Utils.get_main_node().add_child(Hazard_Ins)
 		pass
 	
 	func switch_callback_func():
 		ANIM_PLAYER.stop()
 		ANIM_NAME = "atk2_air_downward_thrust_callback"
 		ANIM_PLAYER.play(ANIM_NAME)
-		var SimpleHazard_Ins = WEAPON.SimpleHazard.instance()
-		SimpleHazard_Ins.set_global_pos(WEAPON.spawn_pos.get_global_pos())
-		Utils.get_main_node().add_child(SimpleHazard_Ins)
+		if WEAPON.stored_status != null:
+			create_hazard( WEAPON.stored_status )
+			WEAPON.stored_status = null
 		.switch_callback_func()
+		pass
+	#no bounce
+	func switch_callback_func_no_bounce():
+		ANIM_PLAYER.stop()
+		ANIM_NAME = "atk2_air_downward_thrust_callback_no_bounce"
+		ANIM_PLAYER.play(ANIM_NAME)
+		HITBOX.call_deferred("set_enable_monitoring", false)
+		update_func = funcref(self, "callback_func_no_bounce")
 		pass
 	func callback_func():
 		WEAPON.air_move(USER)
 		USER.jump(700)
+		if not ANIM_PLAYER.is_playing():
+			WEAPON.stop_atking()
+		pass
+	func callback_func_no_bounce():
+		USER.move(0, USER.accerleration)
 		if not ANIM_PLAYER.is_playing():
 			WEAPON.stop_atking()
 		pass
@@ -219,7 +237,11 @@ func _on_atk2_thrust_area_enter( area ):
 	if area.is_in_group("ENEMY"):
 		direction = flip.get_scale().x
 		var push_back_force_edit = Vector2(push_back_force.x*3, push_back_force.y)
-		area.get_parent().take_damage(damage, direction,push_back_force_edit)
+		var enemy = area.get_parent()
+		enemy.take_damage(damage, direction,push_back_force_edit)
+		#check to get stored status
+		if enemy.has_method("get_stored_status"):
+			stored_status = enemy.get_stored_status()
 		#stop moving while thrusting
 		switch_atk_state_callback()
 	pass # replace with function body
@@ -235,5 +257,13 @@ func _on_atk2_air_downward_thrust_area_enter( area ):
 
 func _on_atk2_air_downward_thrust_body_enter( body ):
 	if body.is_in_group("GROUND"):
-		switch_atk_state_callback()
+		if stored_status == null:
+			switch_atk_state_callback_downward_thrust_no_bounce()
+		else:
+			switch_atk_state_callback()
 	pass # replace with function body
+
+#for downward move only
+func switch_atk_state_callback_downward_thrust_no_bounce():
+	cur_atk_state.switch_callback_func_no_bounce()
+	pass

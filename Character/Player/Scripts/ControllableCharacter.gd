@@ -37,6 +37,8 @@ func update_state():
 ##ovrride take_damage
 func take_damage(damage, direction, push_back_force):
 	.take_damage(damage, direction, push_back_force)
+	if state_machine.get_current_state() == STATE.ATKING:
+		weapon.stop_all_hitboxes()
 	state_machine.pop_state()
 	state_machine.push_state(STATE.HURT)
 	ground_detector.set_enabled(false)

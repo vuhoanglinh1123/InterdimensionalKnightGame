@@ -6,6 +6,8 @@ onready var hitbox = flip.get_node("attack/hitbox")
 var WanderBehavior  = preload("res://Character/Enemy/GroundEnemy/AIBehaviors/WanderBehavior.gd")
 var PursuitBehavior = preload("res://Character/Enemy/GroundEnemy/AIBehaviors/PursuitBehavior.gd")
 
+var StoredStatus = preload("res://Environment/ElementalStatus/StoredStatus.gd")
+var SimpleHazard = preload("res://Environment/ElementalHazard/SimpleElementalHazard.tscn")
 # STATES
 const STATE = { 
 	WANDER = "wander",
@@ -14,12 +16,16 @@ const STATE = {
 	HURT = "hurt"
 }
 
+#Stored Status
+var stored_status
 # READY
 func _ready():
 	WanderBehavior  = WanderBehavior.new(self)
 	PursuitBehavior = PursuitBehavior.new(self)
 	state_machine.push_state(STATE.WANDER)
 	hitbox.set_enable_monitoring(false)
+	
+	stored_status = StoredStatus.new(Utils.STATUS.POISON, 3, 1, SimpleHazard)
 	pass
 
 func _draw():
@@ -161,6 +167,10 @@ func switch_attack_func():
 
 func switch_callback_func():
 	obj_attack.switch_callback_func()
+	pass
+
+func get_stored_status():
+	return stored_status
 	pass
 
 # Inner class that handles attack
