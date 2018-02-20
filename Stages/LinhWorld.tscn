@@ -71,5 +71,6 @@ START_POSITION = Vector2( 2800, 350 )
 [node name="slime" parent="enemies" instance=ExtResource( 6 )]
 
 transform/pos = Vector2( 1346.85, -1.42041 )
+TRACE_AMOUNT = 6
 
 
