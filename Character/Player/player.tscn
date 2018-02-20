@@ -1,34 +1,24 @@
-[gd_scene load_steps=9 format=1]
+[gd_scene load_steps=7 format=1]
 
 [ext_resource path="res://Character/Player/Scripts/ControllableCharacter.gd" type="Script" id=1]
-[ext_resource path="res://Character/Player/Scripts/PlayerHitbox.gd" type="Script" id=2]
+[ext_resource path="res://Weapon/DefaultSword/DefaultSword.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Character/Player/Sprites/test_face.png" type="Texture" id=3]
 
 [sub_resource type="CapsuleShape2D" id=1]
 
 custom_solver_bias = 0.0
 radius = 30.0
-height = 70.0
+height = 68.011
 
 [sub_resource type="RectangleShape2D" id=2]
 
 custom_solver_bias = 0.0
-extents = Vector2( 50, 64.1176 )
+extents = Vector2( 64, 64 )
 
 [sub_resource type="RectangleShape2D" id=3]
 
 custom_solver_bias = 0.0
-extents = Vector2( 59.2388, 79.2355 )
-
-[sub_resource type="RectangleShape2D" id=4]
-
-custom_solver_bias = 0.0
-extents = Vector2( 72.076, 17.7886 )
-
-[sub_resource type="RectangleShape2D" id=5]
-
-custom_solver_bias = 0.0
-extents = Vector2( 64, 64 )
+extents = Vector2( 64, 5 )
 
 [node name="player" type="RigidBody2D" groups=[
 "PLAYER",
@@ -65,77 +55,12 @@ MAX_HEALTH = 20
 
 [node name="flip" type="Node2D" parent="."]
 
-[node name="hitboxes" type="Node2D" parent="flip"]
+editor/display_folded = true
 
-script/script = ExtResource( 2 )
+[node name="DefaultSword" parent="flip" instance=ExtResource( 2 )]
+
 damage = 1
 push_back_force = Vector2( 200, -400 )
-status = "none"
-atk_1_combo_time_max = 0.3
-atk_1_end_combo_time_max = 0.5
-
-[node name="slash1" type="Area2D" parent="flip/hitboxes"]
-
-editor/display_folded = true
-transform/pos = Vector2( 64, 0 )
-input/pickable = true
-shapes/0/shape = SubResource( 2 )
-shapes/0/transform = Matrix32( 1, 0, 0, 1, 50, 0 )
-shapes/0/trigger = true
-gravity_vec = Vector2( 0, 1 )
-gravity = 98.0
-linear_damp = 0.1
-angular_damp = 1.0
-collision/layers = 524288
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="flip/hitboxes/slash1"]
-
-transform/pos = Vector2( 50, 0 )
-shape = SubResource( 2 )
-trigger = true
-_update_shape_index = 0
-
-[node name="slash2" type="Area2D" parent="flip/hitboxes"]
-
-editor/display_folded = true
-transform/pos = Vector2( 64, 0 )
-input/pickable = true
-shapes/0/shape = SubResource( 3 )
-shapes/0/transform = Matrix32( 1, 0, 0, 1, 63.6549, -16.0932 )
-shapes/0/trigger = true
-gravity_vec = Vector2( 0, 1 )
-gravity = 98.0
-linear_damp = 0.1
-angular_damp = 1.0
-collision/layers = 524288
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="flip/hitboxes/slash2"]
-
-transform/pos = Vector2( 63.6549, -16.0932 )
-shape = SubResource( 3 )
-trigger = true
-_update_shape_index = 0
-
-[node name="thrust" type="Area2D" parent="flip/hitboxes"]
-
-editor/display_folded = true
-transform/pos = Vector2( 64, 0 )
-input/pickable = true
-shapes/0/shape = SubResource( 4 )
-shapes/0/transform = Matrix32( 1, 0, 0, 1, 75.8467, 0 )
-shapes/0/trigger = true
-gravity_vec = Vector2( 0, 1 )
-gravity = 98.0
-linear_damp = 0.1
-angular_damp = 1.0
-collision/layers = 524288
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="flip/hitboxes/thrust"]
-
-transform/pos = Vector2( 75.8467, 0 )
-shape = SubResource( 4 )
-trigger = true
-_update_shape_index = 0
 
 [node name="Sprites" type="Sprite" parent="flip"]
 
@@ -149,7 +74,7 @@ _update_shape_index = 0
 
 [node name="ground_detector" type="RayCast2D" parent="."]
 
-transform/pos = Vector2( -64, 65 )
+transform/pos = Vector2( -64, 64.5 )
 enabled = true
 cast_to = Vector2( 128, 0 )
 layer_mask = 4
@@ -176,13 +101,14 @@ drag_margin/right = 0.2
 drag_margin/bottom = 0.2
 
 [node name="hurtbox" type="Area2D" parent="." groups=[
-"PLAYER",
 "player_hurtbox",
+"HURTBOX",
+"PLAYER",
 ]]
 
 input/pickable = true
-shapes/0/shape = SubResource( 5 )
-shapes/0/transform = Matrix32( 1, 0, 0, 1, -0.397217, -0.397213 )
+shapes/0/shape = SubResource( 2 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, -0.59874 )
 shapes/0/trigger = false
 gravity_vec = Vector2( 0, 1 )
 gravity = 98.0
@@ -191,15 +117,30 @@ angular_damp = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="hurtbox"]
 
-transform/pos = Vector2( -0.397217, -0.397213 )
-shape = SubResource( 5 )
+transform/pos = Vector2( 0, -0.59874 )
+shape = SubResource( 2 )
 trigger = false
 _update_shape_index = 0
 
-[connection signal="area_enter" from="flip/hitboxes/slash1" to="flip/hitboxes" method="_on_slash1_area_enter"]
+[node name="oneway_leave" type="Area2D" parent="."]
 
-[connection signal="area_enter" from="flip/hitboxes/slash2" to="flip/hitboxes" method="_on_slash2_area_enter"]
+transform/pos = Vector2( 0, -69 )
+input/pickable = true
+shapes/0/shape = SubResource( 3 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+shapes/0/trigger = false
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+collision/mask = 4
 
-[connection signal="area_enter" from="flip/hitboxes/thrust" to="flip/hitboxes" method="_on_thrust_area_enter"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="oneway_leave"]
+
+shape = SubResource( 3 )
+trigger = false
+_update_shape_index = 0
+
+[connection signal="body_enter" from="oneway_leave" to="." method="_on_oneway_leave_body_enter"]
 
 

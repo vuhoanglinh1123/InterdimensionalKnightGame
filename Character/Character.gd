@@ -25,15 +25,13 @@ var current_speed = Vector2()
 
 var cur_health = 0
 
-#status resistances
-var poison_resis = 0
-
 #states: "ground", "air",...
 var state_machine = StackFSM.new(self)
 
 ##ELEMENTS_HARMFUL
 var status_array = StatusArray.new()
 
+var elapsed_time = 0
 
 func _ready():
 	init_variable()
@@ -53,6 +51,7 @@ func _integrate_forces(state):
 	destroyed()
 	pass
 func _process(delta):
+	elapsed_time = delta
 	active_status(delta)
 	pass
 
@@ -74,12 +73,15 @@ func ground_check():
 	else:
 		return false
 	pass
-
-##OVERRIDE
-#override this for switching state, 
-func update_state():
+func platform_check():
+	if ground_detector.is_colliding():
+		var body = ground_detector.get_collider()
+		if body.is_in_group("PLATFORM"):
+			return body
+	else:
+		return null
 	pass
-#
+
 ##take_damage: Can be extend depend character
 #direction: push direction in x-axis
 func take_damage(damage, direction, push_back_force):
@@ -91,13 +93,12 @@ func take_damage(damage, direction, push_back_force):
 ##to apply element
 func apply_status(type, duration, level):
 	var new_status = Utils.creat_status(type, self, duration, level)
-	status_array.add(new_status)
+	status_array.add(new_status, elapsed_time)
 	pass
 
 #make element effect run
 func active_status(delta):
-	for status in status_array.list:
-		status.update()
+	status_array.update(delta)
 	pass
 
 
