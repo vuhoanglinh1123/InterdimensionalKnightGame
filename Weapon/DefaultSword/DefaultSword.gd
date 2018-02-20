@@ -12,7 +12,8 @@ onready var atk2_thrust = hitboxes.get_node("atk2_thrust")
 onready var atk2_air_downward_thrust = hitboxes.get_node("atk2_air_downward_thrust")
 
 #spawn position of hazard
-onready var spawn_pos = atk2_air_downward_thrust.get_node("spawn_pos")
+onready var spawn_pos = hitboxes.get_node("spawn_pos")
+onready var spawn_pos_2dwt = atk2_air_downward_thrust.get_node("spawn_pos_2dwt")
 #hazard use to spawn
 var stored_status = null
 var SimpleHazard = preload("res://Environment/ElementalHazard/SimpleElementalHazard.tscn")
@@ -33,11 +34,7 @@ func stop_all_hitboxes():
 	pass
 ##ground atk
 func state_atk1_init():
-	#up atk
-	if user.btn_up.check() == 2:
-		pass
-	else:
-		cur_atk_state = StateAtk1Combo1.new(self)
+	cur_atk_state = StateAtk1Combo1.new(self)
 	pass
 	
 func state_atk1_air_init():
@@ -45,7 +42,10 @@ func state_atk1_air_init():
 	pass
 	
 func state_atk2_init():
-	cur_atk_state = StateAtk2Thrust.new(self)
+	if user.btn_down.check() == 1 || user.btn_down.check() == 2:
+		cur_atk_state = StateAtk2ThrustDown.new(self)
+	else:
+		cur_atk_state = StateAtk2Thrust.new(self)
 	pass
 	
 func state_atk2_air_init():
@@ -157,6 +157,32 @@ class StateAtk2Thrust extends "res://Utils/AttackState.gd":
 		if not ANIM_PLAYER.is_playing():
 			WEAPON.stop_atking()
 		pass
+#hit ground to cause explosion
+class StateAtk2ThrustDown extends "res://Utils/AttackState.gd":
+	func _init(weapon).(weapon):
+		HITBOX = null
+		ANIM_PLAYER = weapon.anim
+		ANIM_NAME = "atk2_thrust_down"
+		ANIM_PLAYER.play(ANIM_NAME)
+		switch_callback_func()
+		pass
+	
+	func create_hazard(hazard):
+		var Hazard_Ins = hazard.spawn_hazard.instance()
+		Hazard_Ins.set_global_pos(WEAPON.spawn_pos.get_global_pos())
+		Utils.get_main_node().add_child(Hazard_Ins)
+		pass
+		
+	func switch_callback_func():
+		if WEAPON.stored_status != null:
+			create_hazard( WEAPON.stored_status )
+			WEAPON.stored_status = null
+		.switch_callback_func()
+	func callback_func():
+		USER.move( 0, USER.accerleration)
+		if not ANIM_PLAYER.is_playing():
+			WEAPON.stop_atking()
+		pass
 #air thrust downward
 class StateAtk2AirThrustDownward extends "res://Utils/AttackState.gd":
 	func _init(weapon).(weapon):
@@ -176,7 +202,7 @@ class StateAtk2AirThrustDownward extends "res://Utils/AttackState.gd":
 	
 	func create_hazard(hazard):
 		var Hazard_Ins = hazard.spawn_hazard.instance()
-		Hazard_Ins.set_global_pos(WEAPON.spawn_pos.get_global_pos())
+		Hazard_Ins.set_global_pos(WEAPON.spawn_pos_2dwt.get_global_pos())
 		Utils.get_main_node().add_child(Hazard_Ins)
 		pass
 	
