@@ -10,6 +10,10 @@ onready var atk1_combo3 = hitboxes.get_node("atk1_combo3")
 onready var atk1_air_spin = hitboxes.get_node("atk1_air_spin")
 onready var atk2_thrust = hitboxes.get_node("atk2_thrust")
 onready var atk2_air_downward_thrust = hitboxes.get_node("atk2_air_downward_thrust")
+
+onready var spawn_pos = atk2_air_downward_thrust.get_node("spawn_pos")
+#instance
+var SimpleHazard = preload("res://Environment/ElementalHazard/SimpleElementalHazard.tscn")
 #all the state this weapon have
 
 func _ready():
@@ -166,11 +170,18 @@ class StateAtk2AirThrustDownward extends "res://Utils/AttackState.gd":
 			HITBOX.call_deferred("set_enable_monitoring", false)
 			WEAPON.cur_atk_state = WEAPON.StateAtk1AirSpin.new(WEAPON)
 		pass
+	
+	func create_hazard():
 		
+		pass
+	
 	func switch_callback_func():
 		ANIM_PLAYER.stop()
 		ANIM_NAME = "atk2_air_downward_thrust_callback"
 		ANIM_PLAYER.play(ANIM_NAME)
+		var SimpleHazard_Ins = WEAPON.SimpleHazard.instance()
+		SimpleHazard_Ins.set_global_pos(WEAPON.spawn_pos.get_global_pos())
+		Utils.get_main_node().add_child(SimpleHazard_Ins)
 		.switch_callback_func()
 		pass
 	func callback_func():

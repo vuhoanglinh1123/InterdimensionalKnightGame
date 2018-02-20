@@ -807,7 +807,6 @@ _update_shape_index = 0
 
 [node name="atk2_air_downward_thrust" type="Area2D" parent="hitboxes"]
 
-editor/display_folded = true
 transform/pos = Vector2( 0, 115 )
 input/pickable = true
 shapes/0/shape = SubResource( 6 )
@@ -823,6 +822,10 @@ angular_damp = 1.0
 shape = SubResource( 6 )
 trigger = false
 _update_shape_index = 0
+
+[node name="spawn_pos" type="Position2D" parent="hitboxes/atk2_air_downward_thrust"]
+
+transform/pos = Vector2( 0, 50 )
 
 [node name="testVisual" type="Control" parent="."]
 
