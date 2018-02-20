@@ -1,8 +1,9 @@
-[gd_scene load_steps=15 format=1]
+[gd_scene load_steps=16 format=1]
 
 [ext_resource path="res://Character/Enemy/GroundEnemy/Slime/Scripts/Slime.gd" type="Script" id=1]
-[ext_resource path="res://Character/Enemy/GroundEnemy/Slime/Sprites/slime_movin.png" type="Texture" id=2]
-[ext_resource path="res://Debuggers/enemy_debugger.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Character/Enemy/GroundEnemy/Slime/Sprites/slime_movin_styupid.png" type="Texture" id=2]
+[ext_resource path="res://Character/Enemy/GroundEnemy/Slime/Sprites/slime_movin.png" type="Texture" id=3]
+[ext_resource path="res://Debuggers/enemy_debugger.tscn" type="PackedScene" id=4]
 
 [sub_resource type="CapsuleShape2D" id=1]
 
@@ -40,6 +41,16 @@ tracks/1/keys = {
 "args": [  ],
 "method": "switch_callback_func"
 } ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath(".:frame")
+tracks/2/interp = 1
+tracks/2/imported = false
+tracks/2/keys = {
+"times": FloatArray( 0 ),
+"transitions": FloatArray( 1 ),
+"update": 1,
+"values": [ 0 ]
 }
 
 [sub_resource type="Animation" id=3]
@@ -118,7 +129,7 @@ tracks/1/keys = {
 "times": FloatArray( 0 ),
 "transitions": FloatArray( 1 ),
 "update": 1,
-"values": [ ExtResource( 2 ) ]
+"values": [ ExtResource( 3 ) ]
 }
 tracks/2/type = "value"
 tracks/2/path = NodePath(".:hframes")
@@ -131,10 +142,11 @@ tracks/2/keys = {
 "values": [ 11 ]
 }
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=12]
 
-length = 0.5
-loop = true
+resource/name = "jump"
+length = 1.0
+loop = false
 step = 0.1
 
 [sub_resource type="Animation" id=7]
@@ -150,7 +162,7 @@ tracks/0/keys = {
 "times": FloatArray( 0 ),
 "transitions": FloatArray( 1 ),
 "update": 1,
-"values": [ ExtResource( 2 ) ]
+"values": [ ExtResource( 3 ) ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath(".:hframes")
@@ -241,7 +253,7 @@ tracks/2/interp = 1
 tracks/2/imported = false
 tracks/2/keys = {
 "times": FloatArray( 0, 0.4 ),
-"transitions": FloatArray( 1, 1 ),
+"transitions": FloatArray( -0.25, 1 ),
 "update": 0,
 "values": [ 0, 11 ]
 }
@@ -311,7 +323,7 @@ transform/scale = Vector2( 1.25, 1.25 )
 texture = ExtResource( 2 )
 offset = Vector2( 0, -10 )
 hframes = 11
-frame = 5
+frame = 6
 
 [node name="anim" type="AnimationPlayer" parent="flip/sprite"]
 
@@ -322,7 +334,7 @@ anims/attack = SubResource( 2 )
 anims/die = SubResource( 3 )
 anims/hurt = SubResource( 4 )
 anims/idle = SubResource( 5 )
-anims/jump = SubResource( 6 )
+anims/jump = SubResource( 12 )
 anims/pursuit = SubResource( 7 )
 anims/recover = SubResource( 8 )
 anims/wander = SubResource( 9 )
@@ -432,7 +444,7 @@ cast_to = Vector2( 0, 50 )
 layer_mask = 4
 type_mask = 1
 
-[node name="enemy_debugger" parent="." instance=ExtResource( 3 )]
+[node name="enemy_debugger" parent="." instance=ExtResource( 4 )]
 
 [connection signal="area_enter" from="flip/attack/hitbox" to="." method="_on_hitbox_area_enter"]
 

@@ -31,21 +31,12 @@ var direction  = 1
 var current_state = ""
 var status = ""
 
-# private var
-var user = self
-var time
-var att_time
-var obj_attack
-
 func _ready():
 	set_process(true)
 	set_fixed_process(true)
 	
 	set_applied_force(Vector2(0, EXTRA_GRAVITY))
 	current_health = MAX_HEALTH
-	
-	att_time = anim.get_animation("attack").get_length() / anim.get_speed()
-	time = ATTACK_INTERVAL + att_time
 	pass
 
 # PROCESS
